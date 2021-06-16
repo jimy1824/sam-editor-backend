@@ -28,6 +28,23 @@ class BodyAdmin(admin.ModelAdmin):
     ordering = ['id']
     search_fields = ('name',)
 
+@admin.register(ConstructorModels.LeftView)
+class LeftView(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.LeftView._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+@admin.register(ConstructorModels.RightView)
+class RightView(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.RightView._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+@admin.register(ConstructorModels.BackView)
+class BackView(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BackView._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
 
 @admin.register(ConstructorModels.ImageField)
 class ImageFieldAdmin(admin.ModelAdmin):
