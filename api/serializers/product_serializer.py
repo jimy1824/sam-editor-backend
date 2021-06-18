@@ -30,7 +30,7 @@ class LeftViewSerializer(serializers.ModelSerializer):
     left_v_lower_part = ImageDetailSerializer()
     class Meta:
         model = models.LeftView
-        fields = ['id', 'name', 'left_v_upper_part', 'left_v_lower_part']
+        fields = ['id', 'name', 'left_v_body_view','left_v_upper_part', 'left_v_lower_part']
 
 class RightViewSerializer(serializers.ModelSerializer):
     right_v_body_view = ImageDetailSerializer()
@@ -38,7 +38,7 @@ class RightViewSerializer(serializers.ModelSerializer):
     right_v_lower_part = ImageDetailSerializer()
     class Meta:
         model = models.RightView
-        fields = ['id', 'name', 'right_v_upper_part', 'right_v_lower_part']
+        fields = ['id', 'name', 'right_v_body_view','right_v_upper_part', 'right_v_lower_part']
 
 class BackViewSerializer(serializers.ModelSerializer):
     back_first_part = ImageDetailSerializer()
