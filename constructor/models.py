@@ -38,7 +38,7 @@ class ImageField(TimeStampedModel):
         ordering = ('-updated_at', '-created_at',)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name}-{self.name}"
 
 
 class Body(TimeStampedModel):

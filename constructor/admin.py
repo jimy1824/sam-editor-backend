@@ -28,11 +28,13 @@ class BodyAdmin(admin.ModelAdmin):
     ordering = ['id']
     search_fields = ('name',)
 
+
 @admin.register(ConstructorModels.LeftView)
 class LeftView(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.LeftView._meta.fields]
     ordering = ['id']
     search_fields = ('name',)
+
 
 @admin.register(ConstructorModels.RightView)
 class RightView(admin.ModelAdmin):
@@ -40,14 +42,20 @@ class RightView(admin.ModelAdmin):
     ordering = ['id']
     search_fields = ('name',)
 
+
 @admin.register(ConstructorModels.BackView)
 class BackView(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.BackView._meta.fields]
     ordering = ['id']
     search_fields = ('name',)
+    # autocomplete_fields = ["back_first_part"]
+
 
 @admin.register(ConstructorModels.ImageField)
 class ImageFieldAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ConstructorModels.ImageField._meta.fields]
+    list_display = ['id', 'name', 'x_point', 'y_point', 'display_image_tag']
     ordering = ['id']
     search_fields = ('name',)
+
+    def display_image_tag(self, obj):
+        return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.image.url))
