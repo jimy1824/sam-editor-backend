@@ -39,9 +39,10 @@
             <h3>Right Side View</h3>
             <p>right.</p>
         </div>
-        <canvas id="myCanvas" width="800" height="800" style="border:1px solid #000000;">
-            Your browser does not support the HTML canvas tag.
-        </canvas>
+{#        <canvas id="myCanvas" width="800" height="800" style="border:1px solid #000000;">#}
+{#            Your browser does not support the HTML canvas tag.#}
+{#        </canvas>#}
+         <div id="myCanvas-container" style="align-content: center;position:relative"></div>
     </div>
 </div>
 
@@ -52,7 +53,6 @@
 <script>
 
     const product = loadProduct()
-    let ORIGINAL_IMAGE_DATA
 
 
     function loadProduct() {
@@ -69,20 +69,28 @@
             }
         });
     };
-    const cacheImageData = () => {
-          const canvas = document.getElementById('myCanvas');
-          const context = canvas.getContext('2d');
-          const original = context.getImageData(0, 0, canvas.width, canvas.height).data
-          ORIGINAL_IMAGE_DATA = new Uint8ClampedArray(original.length)
-          for (let i = 0; i < original.length; i += 1) {
-              ORIGINAL_IMAGE_DATA[i] = original[i]
-          }
+
+    const addLayer=(layerId)=>{
+        var canvas = document.createElement("canvas");
+        canvas.id = layerId;
+        canvas.width = 500;
+        canvas.height = 400;
+        canvas.style.cssText = "position:absolute;left:0;top:0";
+        document.getElementById("myCanvas-container").appendChild(canvas);
+
     }
     const loadImage = (url, imageId, left, top) => {
-        var ctx = document.getElementById('myCanvas').getContext('2d');
+        var canvas = document.createElement("canvas");
+        canvas.id = imageId;
+        canvas.width = 800;
+        canvas.height = 800;
+        canvas.style.cssText = "position:absolute;left:0;top:0";
+        {#canvas.style.cssText = "left:0;top:0";#}
+        document.getElementById("myCanvas-container").appendChild(canvas);
+
+        var ctx = canvas.getContext('2d');
         var img = new Image();
         img.setAttribute('id', imageId);
-        console.log(imageId,left,top,'kkkkkkkkk')
         img.onload = function () {
             ctx.drawImage(img, left, top);
             {#ctx.beginPath();#}
@@ -93,25 +101,34 @@
     }
 
     function clearCanvas() {
-        const canvas = document.getElementById('myCanvas');
-        const context = canvas.getContext('2d');
-        context.clearRect(0, 0, 800, 800);
-        console.log(context)
+        var allCanvas = document.getElementsByTagName('canvas');
+        for(var i = 0; i < allCanvas.length; i++) {
+               console.log(allCanvas[i])
+               const context = allCanvas[i].getContext('2d')
+               context.clearRect(0, 0, 800, 800)
+        }
     }
 
     function draw() {
-         const canvas = document.getElementById('myCanvas');
-         var ctx = canvas.getContext("2d");
-         console.log( ctx.getImageData(11,105,20,100))
-         const imgData = ctx.getImageData(106, 105, 400, 100)
-         for (let i = 0; i < imgData.data.length; i +=  4) {
+         const canvas = document.getElementById('front-collar');
+         console.log(canvas)
+         var context = canvas.getContext("2d");
+         const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+         for (let i = 0; i < imgData.data.length; i += 4) {
             imgData.data[i] = 255
          }
-         ctx.putImageData(imgData, 106, 105)
+         context.putImageData(imgData, 0, 0)
+
+
+         {#const imgData = ctx.getImageData(0, 0, 400, 100)#}
+         {#for (let i = 0; i < imgData.data.length; i +=  4) {#}
+         {#   imgData.data[i] = 255#}
+
+         {#ctx.putImageData(imgData, 0, 0)#}
          {#ctx.fillStyle = "#00ff00"#}
-         {#ctx.fillRect(106,105, 200, 200)#}
+         {#ctx.fillRect(0,0, 200, 200)#}
           {#var img=document.getElementById('body_first_section')#}
-          {#console.log(img)#}
+
           {#const canvas = document.getElementById('myCanvas');#}
           {#var ctx = canvas.getContext("2d");#}
           {#var img = new Image;#}
@@ -128,38 +145,8 @@
           {#// draw image#}
           {#ctx.drawImage(this, 0, 0);#}
     }
-    function changeColor(img, hue, sat, l, x, y, width, height)
-   {
-    const canvas = document.getElementById('myCanvas');
-    var context = canvas.getContext("2d");
-    context.clearRect(x, y, width, height);
-    context.globalCompositeOperation = "source-over";
-    context.drawImage(img, x, y, width, height);
-
-    var lcombo = false;
-    if (lcombo) {
-     context.globalCompositeOperation = "color";
-     context.fillStyle = "hsl(" + hue + "," + sat + "%, 50%)";
-     context.fillRect(x, y, width, height);
-     context.clearRect(x, y, width, height);
-    } else {
-     context.globalCompositeOperation = l < 100 ? "color-burn" : "color-dodge";
-     l = l >= 100 ? l - 100 : 100 - (100 - l);
-     context.fillStyle = "hsl(0, 50%, " + l + "%)";
-
-     context.globalCompositeOperation = "saturation";
-     context.fillStyle = "hsl(0," + sat + "%, 50%)";
-     context.fillRect(x, y, width, height);
-
-     context.globalCompositeOperation = "hue"; //hue
-     context.fillStyle = "hsl(" + hue + ",1%, 50%)";
-    }
-    context.globalCompositeOperation = "destination-in";
-    context.globalCompositeOperation = "source-over";
-   }
 
     function frontImageLoad() {
-        console.log('front')
         clearCanvas()
         let body = JSON.parse(localStorage.getItem('body'))
         if (body.body_first_section?.image) {
@@ -216,7 +203,6 @@
         }
 
         if (back.back_left_sleeve?.image) {
-            console.log(back.back_left_sleeve, 'back.back_left_sleeve?')
             loadImage(
                 back.back_left_sleeve.image,
                 'back_left_sleeve',
