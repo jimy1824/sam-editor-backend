@@ -22,7 +22,7 @@ class ProductView(viewsets.ModelViewSet):
 
 
 class CategoryView(viewsets.ModelViewSet):
-    queryset = models.Category.objects.all()
+    queryset = models.Category.objects.all().order_by('order')
     serializer_classes = {
         'list': product_serializer.CategoryListSerializer,
     }

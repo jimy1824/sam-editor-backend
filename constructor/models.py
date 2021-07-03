@@ -16,6 +16,7 @@ class TimeStampedModel(models.Model):
 class Category(TimeStampedModel):
     name = models.CharField(max_length=250, unique=True, help_text="Product Category Name")
     key = models.CharField(max_length=250, unique=True, help_text="Product Category Key")
+    order = models.IntegerField(default=1, )
 
     class Meta:
         get_latest_by = 'updated_at'
@@ -54,7 +55,8 @@ class Body(TimeStampedModel):
     hem = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hem', blank=True, null=True)
     right_sleeve = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='r_sleeve', blank=True,
                                      null=True)
-    left_sleeve = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='l_sleeve', blank=True, null=True)
+    left_sleeve = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='l_sleeve', blank=True,
+                                    null=True)
 
     class Meta:
         get_latest_by = 'updated_at'
