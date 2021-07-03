@@ -51,6 +51,13 @@ class BackView(admin.ModelAdmin):
     # autocomplete_fields = ["back_first_part"]
 
 
+@admin.register(ConstructorModels.DesignImages)
+class DesignImages(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.DesignImages._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
 @admin.register(ConstructorModels.ImageField)
 class ImageFieldAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'x_point', 'y_point', 'display_image_tag']

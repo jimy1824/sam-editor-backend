@@ -1,5 +1,4 @@
 {% load static %}
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,7 +24,9 @@
         <div id="front" class="tab-pane fade in active">
             <h3>Front View</h3>
             <p>front.</p>
+            <input type="file" id="image_uploads" name="image_uploads" accept=".png"/>
             <button onclick="draw()">color</button>
+
         </div>
         <div id="back" class="tab-pane fade">
             <h3>Back View</h3>
@@ -65,7 +66,7 @@
                 localStorage.setItem('back', JSON.stringify(data.back_view));
                 localStorage.setItem('left', JSON.stringify(data.left_view));
                 localStorage.setItem('right', JSON.stringify(data.right_view));
-                {#frontImageLoad()#}
+                // {#frontImageLoad()#}
             }
         });
     };
@@ -85,11 +86,11 @@
         console.log(imageId,left,top,'kkkkkkkkk')
         img.onload = function () {
             ctx.drawImage(img, left, top);
-            {#ctx.beginPath();#}
-            {#ctx.moveTo(left, top);#}
-        };
-        img.src = url;
-        {#cacheImageData()#}
+        //     {#ctx.beginPath();#}
+        //     {#ctx.moveTo(left, top);#}
+        // };
+        // img.src = url;
+        // {#cacheImageData()#}
     }
 
     function clearCanvas() {
@@ -103,30 +104,30 @@
          const canvas = document.getElementById('myCanvas');
          var ctx = canvas.getContext("2d");
          console.log( ctx.getImageData(11,105,20,100))
-         const imgData = ctx.getImageData(106, 105, 400, 100)
+          const imgData = ctx.getImageData(106, 105, 122, 214)
          for (let i = 0; i < imgData.data.length; i +=  4) {
             imgData.data[i] = 255
          }
          ctx.putImageData(imgData, 106, 105)
-         {#ctx.fillStyle = "#00ff00"#}
-         {#ctx.fillRect(106,105, 200, 200)#}
-          {#var img=document.getElementById('body_first_section')#}
-          {#console.log(img)#}
-          {#const canvas = document.getElementById('myCanvas');#}
-          {#var ctx = canvas.getContext("2d");#}
-          {#var img = new Image;#}
-          {#img.onload = draw;#}
-          {#img.src = "//i.stack.imgur.com/cZ0gC.png";#}
-          {##}
-          {#// draw color#}
-          {#ctx.fillStyle = "#09f";#}
-          {#ctx.fillRect(0, 0, 200, 200);#}
-          {##}
-          {#// set composite mode#}
-          {#ctx.globalCompositeOperation = "destination-in";#}
-          {##}
-          {#// draw image#}
-          {#ctx.drawImage(this, 0, 0);#}
+         // {#ctx.fillStyle = "#00ff00"#}
+         // {#ctx.fillRect(106,105, 200, 200)#}
+         //  {#var img=document.getElementById('body_first_section')#}
+         //  {#console.log(img)#}
+         //  {#const canvas = document.getElementById('myCanvas');#}
+         //  {#var ctx = canvas.getContext("2d");#}
+         //  {#var img = new Image;#}
+         //  {#img.onload = draw;#}
+         //  {#img.src = "//i.stack.imgur.com/cZ0gC.png";#}
+         //  {##}
+         //  {#// draw color#}
+         //  {#ctx.fillStyle = "#09f";#}
+         //  {#ctx.fillRect(0, 0, 200, 200);#}
+         //  {##}
+         //  {#// set composite mode#}
+         //  {#ctx.globalCompositeOperation = "destination-in";#}
+         //  {##}
+         //  {#// draw image#}
+         //  {#ctx.drawImage(this, 0, 0);#}
     }
     function changeColor(img, hue, sat, l, x, y, width, height)
    {

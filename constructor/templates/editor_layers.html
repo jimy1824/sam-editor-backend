@@ -1,5 +1,4 @@
 {% load static %}
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/konva@8/konva.min.js"></script>
     <script src="{% static 'js/fabric.min.js' %}"></script>
 </head>
 <body>
@@ -24,25 +24,57 @@
     <div class="tab-content">
         <div id="front" class="tab-pane fade in active">
             <h3>Front View</h3>
-            <p>front.</p>
-            <button onclick="draw()">color</button>
+            <p>f.</p>
+            <p>Select Collar Color</p>
+            <button onclick="draw()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <br>
+            <p>Select Body Color</p>
+            <button onclick="drawBody()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="drawBody()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="drawBody()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
+
         </div>
+
         <div id="back" class="tab-pane fade">
             <h3>Back View</h3>
             <p> back</p>
+            <button onclick="drawBack()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="drawBack()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="drawBack()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
         </div>
+
         <div id="left" class="tab-pane fade">
             <h3>Left Side View</h3>
             <p>lef</p>
+            <button onclick="draw()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
         </div>
+
         <div id="right" class="tab-pane fade">
             <h3>Right Side View</h3>
             <p>right.</p>
+            <button onclick="draw()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
         </div>
-{#        <canvas id="myCanvas" width="800" height="800" style="border:1px solid #000000;">#}
-{#            Your browser does not support the HTML canvas tag.#}
-{#        </canvas>#}
-         <div id="myCanvas-container" style="align-content: center;position:relative"></div>
+        <!--{#        <canvas id="myCanvas" width="800" height="800" style="border:1px solid #000000;">#}-->
+        <!--{#            Your browser does not support the HTML canvas tag.#}-->
+        <!--{#        </canvas>#}-->
+        <div id="myCanvas-container" style="align-content: center;position:relative">
+
+            <div id="mydiv" style="position: absolute">
+                <img id="uploaded_img" width="50px" draggable="true"/>
+            </div>
+
+
+        </div>
     </div>
 </div>
 
@@ -65,12 +97,196 @@
                 localStorage.setItem('back', JSON.stringify(data.back_view));
                 localStorage.setItem('left', JSON.stringify(data.left_view));
                 localStorage.setItem('right', JSON.stringify(data.right_view));
-                {#frontImageLoad()#}
+                // {#frontImageLoad()#}
             }
         });
     };
 
-    const addLayer=(layerId)=>{
+    dragElement(document.getElementById("myCanvas-container"));
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+        elmnt.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
+
+    var loadFile = function (event) {
+        var image = document.getElementById('uploaded_img');
+        image.src = URL.createObjectURL(event.target.files[0]);
+        console.log(event.target.files[0])
+
+         var width = window.innerWidth;
+      var height = window.innerHeight;
+
+      function update(activeAnchor) {
+        var group = activeAnchor.getParent();
+
+        var topLeft = group.get('.topLeft')[0];
+        var topRight = group.get('.topRight')[0];
+        var bottomRight = group.get('.bottomRight')[0];
+        var bottomLeft = group.get('.bottomLeft')[0];
+        var image = group.get('Image')[0];
+
+        var anchorX = activeAnchor.getX();
+        var anchorY = activeAnchor.getY();
+
+        // update anchor positions
+        switch (activeAnchor.getName()) {
+          case 'topLeft':
+            topRight.y(anchorY);
+            bottomLeft.x(anchorX);
+            break;
+          case 'topRight':
+            topLeft.y(anchorY);
+            bottomRight.x(anchorX);
+            break;
+          case 'bottomRight':
+            bottomLeft.y(anchorY);
+            topRight.x(anchorX);
+            break;
+          case 'bottomLeft':
+            bottomRight.y(anchorY);
+            topLeft.x(anchorX);
+            break;
+        }
+
+        image.position(topLeft.position());
+
+        var width = topRight.getX() - topLeft.getX();
+        var height = bottomLeft.getY() - topLeft.getY();
+        if (width && height) {
+          image.width(width);
+          image.height(height);
+        }
+      }
+      function addAnchor(group, x, y, name) {
+        var stage = group.getStage();
+        var layer = group.getLayer();
+
+        var anchor = new Konva.Circle({
+          x: x,
+          y: y,
+          stroke: '#666',
+          fill: '#ddd',
+          strokeWidth: 2,
+          radius: 8,
+          name: name,
+          draggable: true,
+          dragOnTop: false,
+        });
+
+        anchor.on('dragmove', function () {
+          update(this);
+        });
+        anchor.on('mousedown touchstart', function () {
+          group.draggable(false);
+          this.moveToTop();
+        });
+        anchor.on('dragend', function () {
+          group.draggable(true);
+        });
+        // add hover styling
+        anchor.on('mouseover', function () {
+          var layer = this.getLayer();
+          document.body.style.cursor = 'pointer';
+          this.strokeWidth(4);
+        });
+        anchor.on('mouseout', function () {
+          var layer = this.getLayer();
+          document.body.style.cursor = 'default';
+          this.strokeWidth(2);
+        });
+
+        group.add(anchor);
+      }
+
+      var stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height,
+      });
+
+      var layer = new Konva.Layer();
+      stage.add(layer);
+
+      // darth vader
+      var darthVaderImg = new Konva.Image({
+        width: 200,
+        height: 137,
+      });
+
+      // yoda
+      var yodaImg = new Konva.Image({
+        width: 93,
+        height: 104,
+      });
+
+      var darthVaderGroup = new Konva.Group({
+        x: 180,
+        y: 50,
+        draggable: true,
+      });
+      layer.add(darthVaderGroup);
+      darthVaderGroup.add(darthVaderImg);
+      addAnchor(darthVaderGroup, 0, 0, 'topLeft');
+      addAnchor(darthVaderGroup, 200, 0, 'topRight');
+      addAnchor(darthVaderGroup, 200, 138, 'bottomRight');
+      addAnchor(darthVaderGroup, 0, 138, 'bottomLeft');
+
+      var yodaGroup = new Konva.Group({
+        x: 20,
+        y: 110,
+        draggable: true,
+      });
+      layer.add(yodaGroup);
+      yodaGroup.add(yodaImg);
+      addAnchor(yodaGroup, 0, 0, 'topLeft');
+      addAnchor(yodaGroup, 93, 0, 'topRight');
+      addAnchor(yodaGroup, 93, 104, 'bottomRight');
+      addAnchor(yodaGroup, 0, 104, 'bottomLeft');
+
+
+
+
+        // console.log(event.target.files[0])
+        // var image_file = new fabric.Image({
+        //     left:0,
+        //     top:0,
+        //     width:200,
+        //     height:200,
+        // })
+
+         // canvas.add(image_file)
+         // canvas.setActiveObject(image_file)
+    }
+
+    const addLayer = (layerId) => {
         var canvas = document.createElement("canvas");
         canvas.id = layerId;
         canvas.width = 500;
@@ -85,7 +301,7 @@
         canvas.width = 800;
         canvas.height = 800;
         canvas.style.cssText = "position:absolute;left:0;top:0";
-        {#canvas.style.cssText = "left:0;top:0";#}
+        // {#canvas.style.cssText = "left:0;top:0";#}
         document.getElementById("myCanvas-container").appendChild(canvas);
 
         var ctx = canvas.getContext('2d');
@@ -93,58 +309,132 @@
         img.setAttribute('id', imageId);
         img.onload = function () {
             ctx.drawImage(img, left, top);
-            {#ctx.beginPath();#}
-            {#ctx.moveTo(left, top);#}
+            // {#ctx.beginPath();#}
+            // {#ctx.moveTo(left, top);#}
         };
         img.src = url;
-        {#cacheImageData()#}
+        // {#cacheImageData()#}
     }
 
     function clearCanvas() {
         var allCanvas = document.getElementsByTagName('canvas');
-        for(var i = 0; i < allCanvas.length; i++) {
-               console.log(allCanvas[i])
-               const context = allCanvas[i].getContext('2d')
-               context.clearRect(0, 0, 800, 800)
+        for (var i = 0; i < allCanvas.length; i++) {
+            console.log(allCanvas[i])
+            const context = allCanvas[i].getContext('2d')
+            context.clearRect(0, 0, 800, 800)
         }
     }
 
     function draw() {
-         const canvas = document.getElementById('front-collar');
-         console.log(canvas)
-         var context = canvas.getContext("2d");
-         const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
-         for (let i = 0; i < imgData.data.length; i += 4) {
+        const canvas = document.getElementById('front-collar');
+        console.log(canvas)
+        var context = canvas.getContext("2d");
+        const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+        for (let i = 0; i < imgData.data.length; i += 4) {
             imgData.data[i] = 255
-         }
-         context.putImageData(imgData, 0, 0)
+        }
+        context.putImageData(imgData, 0, 0)
 
 
-         {#const imgData = ctx.getImageData(0, 0, 400, 100)#}
-         {#for (let i = 0; i < imgData.data.length; i +=  4) {#}
-         {#   imgData.data[i] = 255#}
+        // {#const imgData = ctx.getImageData(0, 0, 400, 100)#}
+        // {#for (let i = 0; i < imgData.data.length; i +=  4) {#}
+        // {#   imgData.data[i] = 255#}
 
-         {#ctx.putImageData(imgData, 0, 0)#}
-         {#ctx.fillStyle = "#00ff00"#}
-         {#ctx.fillRect(0,0, 200, 200)#}
-          {#var img=document.getElementById('body_first_section')#}
-
-          {#const canvas = document.getElementById('myCanvas');#}
-          {#var ctx = canvas.getContext("2d");#}
-          {#var img = new Image;#}
-          {#img.onload = draw;#}
-          {#img.src = "//i.stack.imgur.com/cZ0gC.png";#}
-          {##}
-          {#// draw color#}
-          {#ctx.fillStyle = "#09f";#}
-          {#ctx.fillRect(0, 0, 200, 200);#}
-          {##}
-          {#// set composite mode#}
-          {#ctx.globalCompositeOperation = "destination-in";#}
-          {##}
-          {#// draw image#}
-          {#ctx.drawImage(this, 0, 0);#}
+        // {#ctx.putImageData(imgData, 0, 0)#}
+        // {#ctx.fillStyle = "#00ff00"#}
+        // {#ctx.fillRect(0,0, 200, 200)#}
+        //  {#var img=document.getElementById('body_first_section')#}
+        //
+        //  {#const canvas = document.getElementById('myCanvas');#}
+        //  {#var ctx = canvas.getContext("2d");#}
+        //  {#var img = new Image;#}
+        //  {#img.onload = draw;#}
+        //  {#img.src = "//i.stack.imgur.com/cZ0gC.png";#}
+        //  {##}
+        //  {#// draw color#}
+        //  {#ctx.fillStyle = "#09f";#}
+        //  {#ctx.fillRect(0, 0, 200, 200);#}
+        //  {##}
+        //  {#// set composite mode#}
+        //  {#ctx.globalCompositeOperation = "destination-in";#}
+        //  {##}
+        //  {#// draw image#}
+        //  {#ctx.drawImage(this, 0, 0);#}
     }
+    //  const el = document.querySelector("#uploaded_img");
+    // console.log(el,"drag")
+    // el.addEventListener('mousedown', mousedown);
+    // function mousedown(e){
+    //     window.addEventListener('mousemove', mousemove);
+    //     window.addEventListener('mouseup', mouseup);
+    //
+    //     let prevX = e.clientX;
+    //     let prevY = e.clientY;
+    //
+    //     function mousemove(e){
+    //         let newX = prevX - e.clientX;
+    //         let newY = prevY - e.clientY;
+    //
+    //         const img = el.getBoundingClientRect();
+    //         el.style.left = img.left - newX + "px";
+    //         el.style.top = img.top - newY + "px";
+    //
+    //         prevX = e.clientX;
+    //         prevY = e.clientY;
+    //
+    //     }
+    //
+    //     function mouseup(e){
+    //
+    //     }
+    // }
+
+
+
+
+    function drawBody(){
+        const canvas = document.getElementById('body_first_section');
+        console.log(canvas)
+        var context = canvas.getContext("2d");
+        const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+        for (let i = 0; i < imgData.data.length; i += 4) {
+            imgData.data[i] = 255
+        }
+        context.putImageData(imgData, 0, 0)
+    }
+
+    function drawBack(){
+        const canvas = document.getElementById('back_second_part');
+        console.log(canvas)
+        var context = canvas.getContext("2d");
+        const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+        for (let i = 0; i < imgData.data.length; i += 4) {
+            imgData.data[i] = 255
+        }
+        context.putImageData(imgData, 0, 0)
+    }
+
+    // function draw1() {
+    //     const canvas = document.getElementById('front-collar');
+    //     console.log(canvas)
+    //     var context = canvas.getContext("2d");
+    //     const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+    //     for (let i = 0; i < imgData.data.length; i += 4) {
+    //         imgData.data[i+1] = 255
+    //     }
+    //     context.putImageData(imgData, 0, 0)
+    // }
+    //
+    // function draw2() {
+    //     const canvas = document.getElementById('front-collar');
+    //     console.log(canvas)
+    //     var context = canvas.getContext("2d");
+    //     const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+    //     for (let i = 0; i < imgData.data.length; i += 4) {
+    //         imgData.data[i+1] = 255
+    //     }
+    //     context.putImageData(imgData, 0, 0)
+    // }
 
     function frontImageLoad() {
         clearCanvas()
