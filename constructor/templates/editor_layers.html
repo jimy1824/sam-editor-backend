@@ -24,6 +24,7 @@
     <div class="tab-content">
         <div id="front" class="tab-pane fade in active">
             <h3>Front View</h3>
+<<<<<<< Updated upstream
             <p>f.</p>
             <p>Select Collar Color</p>
             <button onclick="draw()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
@@ -36,6 +37,15 @@
             <button onclick="drawBody()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
             <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
 
+=======
+            <p>front.</p>
+            <form method="post" action="" class="js-form-create-form">
+                  <label for="favcolor">Select your favorite color:</label>
+                  <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><br>
+                  <input type="submit">
+             </form>
+            <button onclick="draw()">color</button>
+>>>>>>> Stashed changes
         </div>
 
         <div id="back" class="tab-pane fade">
@@ -85,6 +95,7 @@
 <script>
 
     const product = loadProduct()
+    let colorCode
 
 
     function loadProduct() {
@@ -325,7 +336,22 @@
         }
     }
 
+    function getColorCode() {
+            var form = $(this);
+            colorCode=form[0].favcolor.value
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(colorCode);
+            colorCode= result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+              } : null;
+            console.log('lllll',colorCode)
+            return false;
+    }
+    $(".js-form-create-form").on("submit", getColorCode);
+
     function draw() {
+<<<<<<< Updated upstream
         const canvas = document.getElementById('front-collar');
         console.log(canvas)
         var context = canvas.getContext("2d");
@@ -412,6 +438,49 @@
             imgData.data[i] = 255
         }
         context.putImageData(imgData, 0, 0)
+=======
+         const canvas = document.getElementById('front-collar');
+         console.log(canvas)
+         var context = canvas.getContext("2d");
+         const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+         for (let i = 0; i < imgData.data.length; i += 4) {
+            {#imgData.data[i] = 255#}
+            {# console.log(imgData.data[i])#}
+             console.log(imgData.data[i+1])
+             {#console.log(imgData.data[i+2])#}
+            {#imgData.data[i] = `rgb(#}
+            {#            ${Math.floor(255 - 42.5 * i)},#}
+            {#            ${Math.floor(255 - 42.5 * i)},#}
+            {#            0)`#}
+         }
+         context.putImageData(imgData, 0, 0)
+
+
+         {#const imgData = ctx.getImageData(0, 0, 400, 100)#}
+         {#for (let i = 0; i < imgData.data.length; i +=  4) {#}
+         {#   imgData.data[i] = 255#}
+
+         {#ctx.putImageData(imgData, 0, 0)#}
+         {#ctx.fillStyle = "#00ff00"#}
+         {#ctx.fillRect(0,0, 200, 200)#}
+          {#var img=document.getElementById('body_first_section')#}
+
+          {#const canvas = document.getElementById('myCanvas');#}
+          {#var ctx = canvas.getContext("2d");#}
+          {#var img = new Image;#}
+          {#img.onload = draw;#}
+          {#img.src = "//i.stack.imgur.com/cZ0gC.png";#}
+          {##}
+          {#// draw color#}
+          {#ctx.fillStyle = "#09f";#}
+          {#ctx.fillRect(0, 0, 200, 200);#}
+          {##}
+          {#// set composite mode#}
+          {#ctx.globalCompositeOperation = "destination-in";#}
+          {##}
+          {#// draw image#}
+          {#ctx.drawImage(this, 0, 0);#}
+>>>>>>> Stashed changes
     }
 
     // function draw1() {
