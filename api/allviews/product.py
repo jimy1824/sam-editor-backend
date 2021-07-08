@@ -1,6 +1,9 @@
 from rest_framework import viewsets
 from constructor import models
 from api.serializers import product_serializer, logo_serializer
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 
 
 
@@ -32,6 +35,35 @@ class CategoryView(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+    @action(detail=True, methods=['get'], name='towel', url_path='towel')
+    def courses(self, request, *args, **kwargs):
+        """
+        Returns list of courses by country`.
+        """
+        category_instance = self.get_object()
+
+        if(category_instance.key == 'towel'):
+            qs = models.Towel.objects.all()
+            serializer_towel = product_serializer.TowelSerializer(qs, many=True)
+
+        return Response(serializer_towel.data)
+
+    @action(detail=True, methods=['get'], name='apron', url_path='apron')
+    def courses(self, request, *args, **kwargs):
+        """
+
+        Returns list of courses by country`.
+        """
+        category_instance = self.get_object()
+
+        if (category_instance.key == 'apron'):
+            qs_apron = models.Apron.objects.all()
+            serializer_apron = product_serializer.ApronSerializer(qs_apron, many=True)
+
+        return Response(serializer_apron.data)
+
+
 
 class LogoView(viewsets.ModelViewSet):
     queryset = models.DesignImages.objects.all()
