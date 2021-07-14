@@ -18,10 +18,11 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from constructor import views
-
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('', views.EditorView.as_view(), name='editor'),
+    path('model_fields/', csrf_exempt(views.ModelFieldsView.as_view()), name='model_fields'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

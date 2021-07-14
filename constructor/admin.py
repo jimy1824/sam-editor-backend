@@ -17,6 +17,7 @@ class CategoryProductDesignAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'display_image_tag']
     ordering = ['id']
     search_fields = ('name',)
+    change_form_template = 'admin/admin_customization.html'
 
     def display_image_tag(self, obj):
         return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
@@ -70,7 +71,8 @@ class ApronAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Apron._meta.fields]
     ordering = ['id']
     search_fields = ('name',)
-    list_display+=['display_image_url']
+    list_display += ['display_image_url']
+
     def display_image_url(self, obj):
         try:
             return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
@@ -104,6 +106,7 @@ class VestBackAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.VestBack._meta.fields]
     ordering = ['id']
     search_fields = ('name',)
+
 
 @admin.register(ConstructorModels.ImageField)
 class ImageFieldAdmin(admin.ModelAdmin):
