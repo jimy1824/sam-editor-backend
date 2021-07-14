@@ -2,38 +2,43 @@
 {% load static %}
 {% load i18n %}
 {% block content %}
-{{ block.super }}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-<script>
-    console.log('aaa')
-    $('#id_category').find(":selected").attr("value");
-    $('#id_category').on('change', function (e) {
-        e.preventDefault();
-        var model_id = $('#id_category').find(":selected").attr("value")
-        $.ajax({
-            type: 'Post',
-            url: "{% url 'model_fields' %}",
-            data: {
-                'model_id': model_id,
-            },
-            success: function (data) {
-                debugger;
-                console.log( data['display_list'],data['display_list'].length)
-                data['display_list'].forEach(iter_elemnts)
-                function iter_elemnts(item,index){
-                    console.log(item,index)
-                    console.log($(item))
-                    $(item).parent().parent().parent().remove()
-                }
-                // for (var i = 0; i < data['display_list'].length; i++) {
-                //     console.log(data[i])
-                //     console.log(document.getElementsByName(data[i]))
-                //     $(data[i]).css('visibility','hidden')
-                // }
-            }
-        });
-    })
-    console.log('bbbb')
+    {{ block.super }}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script>
+        $('#id_category').find(":selected").attr("value");
+        $('#id_category').on('change', function (e) {
+            e.preventDefault();
+            var model_id = $('#id_category').find(":selected").attr("value")
+            $.ajax({
+                type: 'Post',
+                url: "{% url 'model_fields' %}",
+                data: {
+                    'model_id': model_id,
+                },
+                success: function (data) {
+                    console.log(data)
+                    data['display_false_list'].forEach(iter_elemnts_false)
 
-</script>
+                    function iter_elemnts_false(item, index) {
+                        console.log(item, index)
+                        console.log($(item).parent().parent().parent())
+                        $(item).parent().parent().parent().attr('hidden', 'true')
+                        console.log($(item).parent().parent().parent())
+                    }
+
+
+                    data['display_true_list'].forEach(iter_elemnts_true)
+
+                    function iter_elemnts_true(item, index) {
+                        console.log(item, index)
+                        $(item).parent().parent().parent()
+                        $(item).parent().parent().parent().removeAttr('hidden')
+                        $(item).parent().parent().parent()
+                    }
+                }
+            });
+        })
+
+
+    </script>
 {% endblock %}

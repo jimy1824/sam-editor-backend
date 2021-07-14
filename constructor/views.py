@@ -23,10 +23,16 @@ class ModelFieldsView(TemplateView):
     def post(self, request, *args, **kwargs):
         category = Category.objects.filter(id=request.POST.get('model_id')).first()
         fields = products_dict[0].get(category.key)
-        display_list = []
+        display_false_list = []
+        display_true_list = []
         for key in fields.keys():
             if fields.get(key) == 'false':
-                display_list.append('#id_' + str(key))
+                display_false_list.append('#id_' + str(key))
+            else:
+                display_true_list.append('#id_' + str(key))
+
         dic = {}
-        dic['display_list'] = display_list
+        dic['display_false_list'] = display_false_list
+        dic['display_true_list'] = display_true_list
+
         return JsonResponse(dic)
