@@ -116,3 +116,16 @@ class ImageFieldAdmin(admin.ModelAdmin):
 
     def display_image_tag(self, obj):
         return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.image.url))
+
+@admin.register(ConstructorModels.BagBack)
+class BagBackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BagBack._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.BagFront)
+class BagFrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BagFront._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
