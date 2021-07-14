@@ -174,9 +174,16 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
+    designs = serializers.SerializerMethodField()
+
     class Meta:
         model = models.Category
-        fields = ['id', 'name', ]
+        fields = ['id', 'name', 'designs']
+
+    def get_designs(self, obj):
+        qs = models.ProductDesign.objects.filter(category=obj)
+        serializer = ProductDesignWithCategorySerializers(qs, many=True)
+        return serializer.data
 
 
 class ProductDesignWithCategorySerializers(serializers.ModelSerializer):

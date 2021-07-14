@@ -21,6 +21,15 @@ class ProductView(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
+    @action(detail=True, methods=['get'], name='product_detail', url_path='product_detail')
+    def product_detail(self, request, *args, **kwargs):
+        """
+        Returns list of courses by country`.
+        """
+        product_design = self.get_object()
+        serializer = self.get_serializer(category_instance)
+        return Response(serializer.data)
+
 
 class CategoryView(viewsets.ModelViewSet):
     queryset = models.Category.objects.all().order_by('order')
