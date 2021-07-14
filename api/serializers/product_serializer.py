@@ -28,7 +28,8 @@ class ApronDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Apron
-        fields = ['id', 'name', 'collar_strip', 'collar_strip_side', 'bukkle', 'body', 'left_strip', 'right_strip', 'pocket']
+        fields = ['id', 'name', 'collar_strip', 'collar_strip_side', 'bukkle', 'body', 'left_strip', 'right_strip',
+                  'pocket']
 
 
 class PantFrontDetailSerializer(serializers.ModelSerializer):
@@ -51,7 +52,6 @@ class PantFrontDetailSerializer(serializers.ModelSerializer):
                   'pant_bottom_right_front',
                   'pant_pocket_left_front',
                   'pant_pocket_right_front']
-
 
 
 class VestFrontDetailSerializer(serializers.ModelSerializer):
@@ -92,9 +92,9 @@ class VestBackDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.VestBack
         fields = ['id', 'name', 'collar_vest_back', 'vest_full_back', 'vest_top_back', 'vest_mid_back',
-                  'vest_bottom_back', 'vest_pocket_left_back', 'vest_pocket_right_back', 'vest_hem_back', 'vest_bottom_right',
+                  'vest_bottom_back', 'vest_pocket_left_back', 'vest_pocket_right_back', 'vest_hem_back',
+                  'vest_bottom_right',
                   'vest_left_sleeve_back', 'vest_right_sleeve_back']
-
 
 
 class BodyDetailSerializer(serializers.ModelSerializer):
@@ -174,18 +174,25 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
-    # designs = ProductListSerializer(source='productdesign_set', many=True)
+    class Meta:
+        model = models.Category
+        fields = ['id', 'name', ]
+
+
+class ProductDesignWithCategorySerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name', 'display_image']
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
     designs = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Category
         fields = ['id', 'name', 'designs']
 
-    def get_designs(self, object):
-        if object.key == "towel":
-            serializers = TowelSerializer(models.Towel.objects.all(), many=True)
-            return serializers.data
-
-        if object.key == "apron":
-            serializers = ApronDetailSerializer(models.Apron.objects.all(), many=True)
-            return serializers.data
+    def get_designs(self, obj):
+        qs = models.ProductDesign.objects.filter(category=obj)
+        serializer = ProductDesignWithCategorySerializers(qs, many=True)
+        return serializer.data

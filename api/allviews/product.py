@@ -5,8 +5,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 
-
-
 # from api.utils.paginator import ResultsSetPagination
 
 
@@ -28,6 +26,8 @@ class CategoryView(viewsets.ModelViewSet):
     queryset = models.Category.objects.all().order_by('order')
     serializer_classes = {
         'list': product_serializer.CategoryListSerializer,
+        'retrieve': product_serializer.CategoryDetailSerializer,
+        'category_detail': product_serializer.CategoryDetailSerializer,
     }
     default_serializer_class = product_serializer.CategoryListSerializer
 
@@ -37,17 +37,13 @@ class CategoryView(viewsets.ModelViewSet):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     @action(detail=True, methods=['get'], name='towel', url_path='towel')
-    def courses(self, request, *args, **kwargs):
+    def category_detail(self, request, *args, **kwargs):
         """
         Returns list of courses by country`.
         """
         category_instance = self.get_object()
-
-        if(category_instance.key == 'towel'):
-            qs = models.Towel.objects.all()
-            serializer_towel = product_serializer.TowelSerializer(qs, many=True)
-
-        return Response(serializer_towel.data)
+        serializer = self.get_serializer(category_instance)
+        return Response(serializer.data)
 
     @action(detail=True, methods=['get'], name='apron', url_path='apron')
     def courses(self, request, *args, **kwargs):
@@ -62,7 +58,6 @@ class CategoryView(viewsets.ModelViewSet):
             serializer_apron = product_serializer.ApronSerializer(qs_apron, many=True)
 
         return Response(serializer_apron.data)
-
 
 
 class LogoView(viewsets.ModelViewSet):
