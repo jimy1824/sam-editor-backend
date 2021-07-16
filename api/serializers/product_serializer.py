@@ -817,6 +817,309 @@ class HoodieDetailSerializer(serializers.ModelSerializer):
                   ]
 
 
+class BomberJacFrontSerializer(serializers.ModelSerializer):
+    bomber_jac_body_front = ImageDetailSerializer()
+    bomber_jac_collar_front = ImageDetailSerializer()
+    bomber_jac_collar_inner_front = ImageDetailSerializer()
+    bomber_jac_left_pocket_front = ImageDetailSerializer()
+    bomber_jac_right_pocket_front = ImageDetailSerializer()
+    bomber_jac_left_sleeve_front = ImageDetailSerializer()
+    bomber_jac_right_sleeve_front = ImageDetailSerializer()
+    bomber_jac_left_cuff_front = ImageDetailSerializer()
+    bomber_jac_right_cuff_front = ImageDetailSerializer()
+    bomber_jac_right_sleeve_design_front = ImageDetailSerializer()
+    bomber_jac_hem_front = ImageDetailSerializer()
+    bomber_jac_zip_front = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BomberJacket_Front
+        fields = ['id', 'name',
+                  'bomber_jac_body_front',
+                  'bomber_jac_collar_front',
+                  'bomber_jac_collar_inner_front',
+                  'bomber_jac_left_pocket_front',
+                  'bomber_jac_right_pocket_front',
+                  'bomber_jac_left_sleeve_front',
+                  'bomber_jac_right_sleeve_front',
+                  'bomber_jac_left_cuff_front',
+                  'bomber_jac_right_cuff_front',
+                  'bomber_jac_right_sleeve_design_front',
+                  'bomber_jac_hem_front',
+                  'bomber_jac_zip_front',
+
+                  ]
+
+
+class BomberJacBackSerializer(serializers.ModelSerializer):
+    bomber_jac_body_back = ImageDetailSerializer()
+    bomber_jac_collar_back = ImageDetailSerializer()
+    bomber_jac_hem_back = ImageDetailSerializer()
+    bomber_jac_left_sleeve_back = ImageDetailSerializer()
+    bomber_jac_right_sleeve_back = ImageDetailSerializer()
+    bomber_jac_left_cuff_back = ImageDetailSerializer()
+    bomber_jac_right_cuff_back = ImageDetailSerializer()
+    bomber_jac_left_sleeve_design_back = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BomberJacket_Back
+        fields = ['id', 'name',
+                  'bomber_jac_body_back',
+                  'bomber_jac_collar_back',
+                  'bomber_jac_hem_back',
+                  'bomber_jac_left_sleeve_back',
+                  'bomber_jac_right_sleeve_back',
+                  'bomber_jac_left_cuff_back',
+                  'bomber_jac_right_cuff_back',
+                  'bomber_jac_left_sleeve_design_back',
+                  ]
+
+
+class BomberJacLeftSerializer(serializers.ModelSerializer):
+    bomber_jac_mid_body_left = ImageDetailSerializer()
+    bomber_jac_left_body_left = ImageDetailSerializer()
+    bomber_jac_right_body_left = ImageDetailSerializer()
+    bomber_jac_bottom_body_left = ImageDetailSerializer()
+    bomber_jac_left_cuff_left = ImageDetailSerializer()
+    bomber_jac_right_cuff_left = ImageDetailSerializer()
+    bomber_jac_mid_cuff_left = ImageDetailSerializer()
+    bomber_jac_bottom_cuff_left = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BomberJacket_Left
+        fields = ['id', 'name',
+                  'bomber_jac_mid_body_left',
+                  'bomber_jac_left_body_left',
+                  'bomber_jac_right_body_left',
+                  'bomber_jac_bottom_body_left',
+                  'bomber_jac_left_cuff_left',
+                  'bomber_jac_right_cuff_left',
+                  'bomber_jac_mid_cuff_left',
+                  'bomber_jac_bottom_cuff_left',
+                  ]
+
+
+class BomberJacRightSerializer(serializers.ModelSerializer):
+    bomber_jac_mid_body_right = ImageDetailSerializer()
+    bomber_jac_left_body_right = ImageDetailSerializer()
+    bomber_jac_right_body_right = ImageDetailSerializer()
+    bomber_jac_bottom_body_right = ImageDetailSerializer()
+    bomber_jac_left_cuff_right = ImageDetailSerializer()
+    bomber_jac_right_cuff_right = ImageDetailSerializer()
+    bomber_jac_mid_cuff_right = ImageDetailSerializer()
+    bomber_jac_bottom_cuff_right = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BomberJacket_Right
+        fields = ['id', 'name',
+                  'bomber_jac_mid_body_right',
+                  'bomber_jac_left_body_right',
+                  'bomber_jac_right_body_right',
+                  'bomber_jac_bottom_body_right',
+                  'bomber_jac_left_cuff_right',
+                  'bomber_jac_right_cuff_right',
+                  'bomber_jac_mid_cuff_right',
+                  'bomber_jac_bottom_cuff_right',
+                  ]
+
+
+class BomberJacDetailSerializer(serializers.ModelSerializer):
+    front_view_bomber_jac = BomberJacFrontSerializer()
+    back_view_base_bomber_jac = BomberJacBackSerializer()
+    left_view_bomber_jac = BomberJacLeftSerializer()
+    right_view_bomber_jac = BomberJacRightSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name',
+                  'front_view_bomber_jac',
+                  'back_view_base_bomber_jac',
+                  'left_view_bomber_jac',
+                  'right_view_bomber_jac'
+                  ]
+
+
+class BaseBShirtFrontDetailSerializer(serializers.ModelSerializer):
+    base_b_shirt_body_front = ImageDetailSerializer()
+    base_b_shirt_neck_front = ImageDetailSerializer()
+    base_b_shirt_left_sleeve_front = ImageDetailSerializer()
+    base_b_shirt_right_sleeve_front = ImageDetailSerializer()
+    base_b_shirt_button_front = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BaseBallShirt_Front
+        fields = ['id', 'name',
+                  'base_b_shirt_body_front',
+                  'base_b_shirt_neck_front',
+                  'base_b_shirt_left_sleeve_front',
+                  'base_b_shirt_right_sleeve_front',
+                  'base_b_shirt_button_front',
+                  ]
+
+
+class BaseBShirtBackDetailSerializer(serializers.ModelSerializer):
+    base_b_shirt_body_back = ImageDetailSerializer()
+    base_b_shirt_left_sleeve_back = ImageDetailSerializer()
+    base_b_shirt_right_sleeve_back = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BaseBallShirt_Back
+        fields = ['id', 'name',
+                  'base_b_shirt_body_back',
+                  'base_b_shirt_left_sleeve_back',
+                  'base_b_shirt_right_sleeve_back',
+                  ]
+
+
+class BaseBShirtLeftDetailSerializer(serializers.ModelSerializer):
+    base_b_shirt_mid_left = ImageDetailSerializer()
+    base_b_shirt_left_sleeve_left = ImageDetailSerializer()
+    base_b_shirt_right_sleeve_left = ImageDetailSerializer()
+    base_b_shirt_bottom_sleeve_left = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BaseBallShirt_Left
+        fields = ['id', 'name',
+                  'base_b_shirt_mid_left',
+                  'base_b_shirt_left_sleeve_left',
+                  'base_b_shirt_right_sleeve_left',
+                  'base_b_shirt_bottom_sleeve_left',
+                  ]
+
+
+class BaseBShirtRightDetailSerializer(serializers.ModelSerializer):
+    base_b_shirt_mid_right = ImageDetailSerializer()
+    base_b_shirt_left_sleeve_right = ImageDetailSerializer()
+    base_b_shirt_right_sleeve_right = ImageDetailSerializer()
+    base_b_shirt_bottom_sleeve_right = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BaseBallShirt_Right
+        fields = ['id', 'name',
+                  'base_b_shirt_mid_right',
+                  'base_b_shirt_left_sleeve_right',
+                  'base_b_shirt_right_sleeve_right',
+                  'base_b_shirt_bottom_sleeve_right',
+                  ]
+
+
+class BaseBShirtDetailSerializer(serializers.ModelSerializer):
+    front_view_base_b_shirt = BaseBShirtFrontDetailSerializer()
+    back_view_base_b_shirt = BaseBShirtBackDetailSerializer()
+    left_view_base_b_shirt = BaseBShirtLeftDetailSerializer()
+    right_view_base_b_shirt = BaseBShirtRightDetailSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name',
+                  'front_view_base_b_shirt',
+                  'back_view_base_b_shirt',
+                  'left_view_base_b_shirt',
+                  'right_view_base_b_shirt'
+                  ]
+
+
+class TankTopFrontSerializer(serializers.ModelSerializer):
+    tank_collar_front = ImageDetailSerializer()
+    tank_collar_inner_front = ImageDetailSerializer()
+    tank_top_front = ImageDetailSerializer()
+    tank_mid_front = ImageDetailSerializer()
+    tank_bottom_front = ImageDetailSerializer()
+    tank_left_sleeve_front = ImageDetailSerializer()
+    tank_right_sleeve_front = ImageDetailSerializer()
+
+    class Meta:
+        model = models.TankTop_Front
+        fields = ['id', 'name',
+                  'tank_collar_front',
+                  'tank_collar_inner_front',
+                  'tank_top_front',
+                  'tank_mid_front',
+                  'tank_bottom_front',
+                  'tank_left_sleeve_front',
+                  'tank_right_sleeve_front',
+                  ]
+
+
+class TankTopBackSerializer(serializers.ModelSerializer):
+    tank_collar_back = ImageDetailSerializer()
+    tank_top_back = ImageDetailSerializer()
+    tank_mid_back = ImageDetailSerializer()
+    tank_bottom_back = ImageDetailSerializer()
+    tank_left_sleeve_back = ImageDetailSerializer()
+    tank_right_sleeve_back = ImageDetailSerializer()
+
+    class Meta:
+        model = models.TankTop_Back
+        fields = ['id', 'name',
+                  'tank_collar_back',
+                  'tank_top_back',
+                  'tank_mid_back',
+                  'tank_bottom_back',
+                  'tank_left_sleeve_back',
+                  'tank_right_sleeve_back',
+                  ]
+
+
+class TankTopDetailSerializer(serializers.ModelSerializer):
+    front_view_tank_top = TankTopFrontSerializer()
+    back_view_tank_top = TankTopBackSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name',
+                  'front_view_tank_top',
+                  'back_view_tank_top',
+                  ]
+
+
+class BagFrontSerializer(serializers.ModelSerializer):
+    bag_handle_front = ImageDetailSerializer()
+    bag_full_front_body = ImageDetailSerializer()
+    bag_top_front_body = ImageDetailSerializer()
+    bag_mid_front_body = ImageDetailSerializer()
+    bag_bottom_front_body = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BagFront
+        fields = ['id', 'name',
+                  'bag_handle_front',
+                  'bag_full_front_body',
+                  'bag_top_front_body',
+                  'bag_mid_front_body',
+                  'bag_bottom_front_body',
+                  ]
+
+
+class BagBackSerializer(serializers.ModelSerializer):
+    bag_handle_back = ImageDetailSerializer()
+    bag_full_back_body = ImageDetailSerializer()
+    bag_top_back_body = ImageDetailSerializer()
+    bag_mid_back_body = ImageDetailSerializer()
+    bag_bottom_back_body = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BagBack
+        fields = ['id', 'name',
+                  'bag_handle_back',
+                  'bag_full_back_body',
+                  'bag_top_back_body',
+                  'bag_mid_back_body',
+                  'bag_bottom_back_body',
+                  ]
+
+
+class BagDetailSerializer(serializers.ModelSerializer):
+    front_view_bag = BagFrontSerializer()
+    back_view_bag = BagBackSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name',
+                  'front_view_bag',
+                  'back_view_bag',
+                  ]
+
+
 class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductDesign
