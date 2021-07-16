@@ -1018,6 +1018,108 @@ class BaseBShirtDetailSerializer(serializers.ModelSerializer):
                   ]
 
 
+class TankTopFrontSerializer(serializers.ModelSerializer):
+    tank_collar_front = ImageDetailSerializer()
+    tank_collar_inner_front = ImageDetailSerializer()
+    tank_top_front = ImageDetailSerializer()
+    tank_mid_front = ImageDetailSerializer()
+    tank_bottom_front = ImageDetailSerializer()
+    tank_left_sleeve_front = ImageDetailSerializer()
+    tank_right_sleeve_front = ImageDetailSerializer()
+
+    class Meta:
+        model = models.TankTop_Front
+        fields = ['id', 'name',
+                  'tank_collar_front',
+                  'tank_collar_inner_front',
+                  'tank_top_front',
+                  'tank_mid_front',
+                  'tank_bottom_front',
+                  'tank_left_sleeve_front',
+                  'tank_right_sleeve_front',
+                  ]
+
+
+class TankTopBackSerializer(serializers.ModelSerializer):
+    tank_collar_back = ImageDetailSerializer()
+    tank_top_back = ImageDetailSerializer()
+    tank_mid_back = ImageDetailSerializer()
+    tank_bottom_back = ImageDetailSerializer()
+    tank_left_sleeve_back = ImageDetailSerializer()
+    tank_right_sleeve_back = ImageDetailSerializer()
+
+    class Meta:
+        model = models.TankTop_Back
+        fields = ['id', 'name',
+                  'tank_collar_back',
+                  'tank_top_back',
+                  'tank_mid_back',
+                  'tank_bottom_back',
+                  'tank_left_sleeve_back',
+                  'tank_right_sleeve_back',
+                  ]
+
+
+class TankTopDetailSerializer(serializers.ModelSerializer):
+    front_view_tank_top = TankTopFrontSerializer()
+    back_view_tank_top = TankTopBackSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name',
+                  'front_view_tank_top',
+                  'back_view_tank_top',
+                  ]
+
+
+class BagFrontSerializer(serializers.ModelSerializer):
+    bag_handle_front = ImageDetailSerializer()
+    bag_full_front_body = ImageDetailSerializer()
+    bag_top_front_body = ImageDetailSerializer()
+    bag_mid_front_body = ImageDetailSerializer()
+    bag_bottom_front_body = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BagFront
+        fields = ['id', 'name',
+                  'bag_handle_front',
+                  'bag_full_front_body',
+                  'bag_top_front_body',
+                  'bag_mid_front_body',
+                  'bag_bottom_front_body',
+                  ]
+
+
+class BagBackSerializer(serializers.ModelSerializer):
+    bag_handle_back = ImageDetailSerializer()
+    bag_full_back_body = ImageDetailSerializer()
+    bag_top_back_body = ImageDetailSerializer()
+    bag_mid_back_body = ImageDetailSerializer()
+    bag_bottom_back_body = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BagBack
+        fields = ['id', 'name',
+                  'bag_handle_back',
+                  'bag_full_back_body',
+                  'bag_top_back_body',
+                  'bag_mid_back_body',
+                  'bag_bottom_back_body',
+                  ]
+
+
+class BagDetailSerializer(serializers.ModelSerializer):
+    front_view_bag = BagFrontSerializer()
+    back_view_bag = BagBackSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name',
+                  'front_view_bag',
+                  'back_view_bag',
+                  ]
+
+
 class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductDesign
