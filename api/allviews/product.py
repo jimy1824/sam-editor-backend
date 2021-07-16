@@ -28,7 +28,6 @@ class ProductView(viewsets.ModelViewSet):
         Returns list of courses by country`.
         """
         product_design = self.get_object()
-        print(product_design.category.key)
         if product_design.category.key == 'shirt':
             serializer = product_serializer.ProductDetailSerializer(product_design)
 
