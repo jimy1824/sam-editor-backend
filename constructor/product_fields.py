@@ -630,3 +630,50 @@ products_dict = [
         },
     }
 ]
+
+all_feilds = [
+    {
+        'front_view': 'false',
+        'front_view_apron': 'false',
+        'front_view_base_b_shirt': 'false',
+        'front_view_base_b_jacket': 'false',
+        'front_view_bomber_jac ': 'false',
+        'front_view_coach_jac': 'false',
+        'front_view_bag': 'false',
+        'front_view_towel': 'false',
+        'front_view_vest': 'false',
+        'front_view_tank_top': 'false',
+        'front_view_hat': 'false',
+        'front_view_hoodie': 'false',
+        'front_view_pant': 'false',
+
+        'back_view': 'false',
+        'back_view_base_b_shirt': 'false',
+        'back_view_base_b_jacket': 'false',
+        'back_view_base_bomber_jac': 'false',
+        'back_view_base_coach_jac': 'false',
+        'back_view_bag': 'false',
+        'back_view_towel': 'false',
+        'back_view_vest': 'false',
+        'back_view_tank_top': 'false',
+        'back_view_hat': 'false',
+        'back_view_hoodie': 'false',
+        'back_view_pant': 'false',
+
+        'left_view': 'false',
+        'left_view_base_b_shirt': 'false',
+        'left_view_base_b_jacket': 'false',
+        'left_view_bomber_jac': 'false',
+        'left_view_coach_jac': 'false',
+        'left_view_hat': 'false',
+        'left_view_hoodie': 'false',
+
+        'right_view': 'false',
+        'right_view_base_b_shirt': 'false',
+        'right_view_base_b_jacket': 'false',
+        'right_view_bomber_jac': 'false',
+        'right_view_coach_jac': 'false',
+        'right_view_hat': 'false',
+        'right_view_hoodie': 'false',
+    }
+]

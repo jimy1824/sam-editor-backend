@@ -59,16 +59,207 @@ class DesignImages(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-@admin.register(ConstructorModels.Towel)
-class TowelAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ConstructorModels.Towel._meta.fields]
+@admin.register(ConstructorModels.TowelFront)
+class TowelFrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.TowelFront._meta.fields]
     ordering = ['id']
     search_fields = ('name',)
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.TowelBack)
+class TowelBackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.TowelBack._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
 
 
 @admin.register(ConstructorModels.Apron)
 class ApronAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Apron._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+
+@admin.register(ConstructorModels.HatFront)
+class HatFrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.HatFront._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.HatBack)
+class HatBackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.HatBack._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+
+@admin.register(ConstructorModels.HatLeft)
+class HatLeftAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.HatLeft._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.HatRight)
+class HatRightAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.HatRight._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+
+@admin.register(ConstructorModels.BaseBallShirt_Front)
+class BaseBallShirt_FrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BaseBallShirt_Front._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.BaseBallShirt_Left)
+class BaseBallShirt_LeftAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BaseBallShirt_Left._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.BaseBallShirt_Right)
+class BaseBallShirt_RightAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BaseBallShirt_Right._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+
+@admin.register(ConstructorModels.BaseBallShirt_Back)
+class BaseBallShirt_BackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BaseBallShirt_Back._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.BaseBallJacket_Front)
+class BaseBallJacket_FrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BaseBallJacket_Front._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.BaseBallJacket_Left)
+class BaseBallJacket_LeftAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BaseBallJacket_Left._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.BaseBallJacket_Right)
+class BaseBallJacket_RightAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BaseBallJacket_Right._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.BaseBallJacket_Back)
+class BaseBallJacket_BackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BaseBallJacket_Back._meta.fields]
     ordering = ['id']
     search_fields = ('name',)
     list_display += ['display_image_url']
@@ -92,6 +283,35 @@ class PantFrontAdmin(admin.ModelAdmin):
             return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
         except:
             return
+
+
+@admin.register(ConstructorModels.PantBack)
+class PantBackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.PantBack._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    list_display += ['display_image_url']
+
+    def display_image_url(self, obj):
+        try:
+            return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
+        except:
+            return
+
+
+@admin.register(ConstructorModels.TankTop_Front)
+class TankTop_FrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.TankTop_Front._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+
+@admin.register(ConstructorModels.TankTop_Back)
+class TankTop_BackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.TankTop_Back._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
 
 
 @admin.register(ConstructorModels.VestFront)

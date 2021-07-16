@@ -42,12 +42,24 @@ class ImageField(TimeStampedModel):
         return f"{self.name}-{self.name}"
 
 
+class DesignImages(TimeStampedModel):
+    name = models.CharField(max_length=200, help_text="DesignImages")
+    image = models.ImageField(upload_to='uploads/body')
+
+    class Meta:
+        get_latest_by = 'updated_at'
+        ordering = ('-updated_at', '-created_at',)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class Body(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="Body Name")
 
     # Body Start
 
-    body_view = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='body_view', )
+    body_view = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='body_view', blank=True, null=True )
     body_first_section = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='body_first_section')
     body_second_section = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='body_second_section',
                                             blank=True, null=True)
@@ -70,7 +82,6 @@ class Body(TimeStampedModel):
 
 class HatFront(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="HatFront")
-    hat_full_body_front = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hat_full_body_front')
     hat_dot_left_front = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hat_dot_left_front',
                                            null=True,
                                            blank=True)
@@ -92,7 +103,6 @@ class HatFront(TimeStampedModel):
 
 class HatLeft(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="HatLeft")
-    hat_full_body_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hat_full_body_left')
 
     hat_dot_left_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hat_dot_left_left',
                                           null=True,
@@ -115,7 +125,6 @@ class HatLeft(TimeStampedModel):
 
 class HatRight(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="HatRight")
-    hat_full_body_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hat_full_body_right')
 
     hat_dot_left_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hat_dot_left_right',
                                            null=True,
@@ -138,7 +147,6 @@ class HatRight(TimeStampedModel):
 
 class HatBack(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="HatBack")
-    hat_full_body_back = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hat_full_body_back')
 
     hat_dot_left_back = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='hat_dot_left_back',
                                           null=True,
@@ -679,9 +687,6 @@ class PantBack(TimeStampedModel):
 #
 class Apron(TimeStampedModel):
     name = models.CharField(max_length=250, help_text='Apron')
-
-    display_image = models.ImageField(upload_to='uploads/display')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     collar_strip = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='collar_strip')
     collar_strip_side = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='collar_strip_side',
                                           null=True, blank=True)
@@ -718,6 +723,7 @@ class TowelFront(TimeStampedModel):
 class TowelBack(TimeStampedModel):
     name = models.CharField(max_length=250, help_text='Towel Back')
     towel_back = models.ForeignKey(ImageField, on_delete=models.CASCADE)
+    display_image = models.ImageField(upload_to='uploads/display')
 
     class Meta:
         get_latest_by = 'updated_at'
@@ -733,20 +739,24 @@ class VestFront(TimeStampedModel):
     collar_vest = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='collar_vest', null=True,
                                     blank=True)
     zip_vest = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='zip_vest', null=True, blank=True)
-    vest_top_full = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top_full', null=True,
+    vest_top = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top', null=True,
                                       blank=True)
-    vest_top_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top_left', null=True,
+    # vest_top_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top_left', null=True,
+    #                                   blank=True)
+    # vest_top_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top_right', null=True,
+    #                                    blank=True)
+    vest_mid = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_mid', null=True,
                                       blank=True)
-    vest_top_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top_right', null=True,
-                                       blank=True)
-    vest_mid_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_mid_left', null=True,
-                                      blank=True)
-    vest_mid_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_mid_right', null=True,
-                                       blank=True)
-    vest_bottom_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_bottom_left',
+    # vest_mid_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_mid_left', null=True,
+    #                                   blank=True)
+    # vest_mid_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_mid_right', null=True,
+    #                                    blank=True)
+    vest_bottom = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_bottom',
                                          null=True, blank=True)
-    vest_bottom_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_bottom_right',
-                                          null=True, blank=True)
+    # vest_bottom_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_bottom_left',
+    #                                      null=True, blank=True)
+    # vest_bottom_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_bottom_right',
+    #                                       null=True, blank=True)
     vest_pocket_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_pocket_left',
                                          null=True, blank=True)
     vest_pocket_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_pocket_right',
@@ -1500,21 +1510,6 @@ class BackView(TimeStampedModel):
                                          blank=True, null=True)
     back_right_sleeve = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='back_right_sleeve',
                                           blank=True, null=True)
-
-    class Meta:
-        get_latest_by = 'updated_at'
-        ordering = ('-updated_at', '-created_at',)
-
-    def __str__(self):
-        return f"{self.name}"
-
-
-class DesignImages(TimeStampedModel):
-    name = models.CharField(max_length=200, help_text="DesignImages")
-    image = models.ImageField(upload_to='uploads/body')
-
-    # image_left = models.ImageField(upload_to='uploads/body')
-    # image_right = models.ImageField(upload_to='uploads/body')
 
     class Meta:
         get_latest_by = 'updated_at'

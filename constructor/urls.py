@@ -23,6 +23,7 @@ from django.views.decorators.csrf import csrf_exempt
 urlpatterns = [
     path('', views.EditorView.as_view(), name='editor'),
     path('model_fields/', csrf_exempt(views.ModelFieldsView.as_view()), name='model_fields'),
+    path('all_model_fields/', csrf_exempt(views.AllModelFieldsView.as_view()), name='all_model_fields'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

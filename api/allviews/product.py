@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from constructor import models
 from api.serializers import product_serializer, logo_serializer
+
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -27,7 +28,61 @@ class ProductView(viewsets.ModelViewSet):
         Returns list of courses by country`.
         """
         product_design = self.get_object()
-        serializer = self.get_serializer(category_instance)
+        print(product_design.category.key)
+        if product_design.category.key == 'shirt':
+            serializer = product_serializer.ProductDetailSerializer(product_design)
+
+            return Response(serializer.data)
+
+        if product_design.category.key == 'vest':
+            serializer = product_serializer.VestDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'towel':
+            serializer = product_serializer.TowelDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'hat':
+            serializer = product_serializer.HatDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'hoodie':
+            serializer = product_serializer.HoodieDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'pants':
+            serializer = product_serializer.PantDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'tank-top':
+            serializer = product_serializer.TankTopDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'coach-jacket':
+            serializer = product_serializer.CoachJacDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'bomber-jacket':
+            serializer = product_serializer.BomberJacDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'base-ball-shirt':
+            serializer = product_serializer.BaseBShirtDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'base-ball-jacket':
+            serializer = product_serializer.BaseBJacDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'bag':
+            serializer = product_serializer.BagDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        if product_design.category.key == 'apron':
+            serializer = product_serializer.ApronDetailSerializer(product_design)
+            return Response(serializer.data)
+
+        serializer = self.get_serializer(product_design)
         return Response(serializer.data)
 
 

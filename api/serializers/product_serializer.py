@@ -3,18 +3,13 @@ from constructor import models
 
 
 class ImageDetailSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
     class Meta:
         model = models.ImageField
-        fields = ['id', 'name', 'image', 'x_point', 'y_point', 'width', 'height']
+        fields = ['id', 'name', 'image','x_point', 'y_point', 'width', 'height']
 
-
-class TowelSerializer(serializers.ModelSerializer):
-    towel_front = ImageDetailSerializer()
-    towel_back = ImageDetailSerializer()
-
-    class Meta:
-        model = models.Towel
-        fields = ['id', 'name', 'towel_front', 'towel_back']
+    def get_image(self, obj):
+        return 'http://localhost:8000'+obj.image.url
 
 
 class ApronDetailSerializer(serializers.ModelSerializer):
@@ -30,6 +25,94 @@ class ApronDetailSerializer(serializers.ModelSerializer):
         model = models.Apron
         fields = ['id', 'name', 'collar_strip', 'collar_strip_side', 'bukkle', 'body', 'left_strip', 'right_strip',
                   'pocket']
+
+
+class HatFrontDetailSerializer(serializers.ModelSerializer):
+    hat_dot_left_front = ImageDetailSerializer()
+    hat_dot_right_front = ImageDetailSerializer()
+    hat_upper_part_front = ImageDetailSerializer()
+    hat_lower_part_front = ImageDetailSerializer()
+    hat_top_button_front = ImageDetailSerializer()
+
+    class Meta:
+        model = models.HatFront
+        fields = ['id', 'name', 'hat_dot_left_front', 'hat_dot_right_front', 'hat_upper_part_front',
+                  'hat_lower_part_front', 'hat_top_button_front']
+
+
+class HatLeftDetailSerializer(serializers.ModelSerializer):
+    hat_dot_left_left = ImageDetailSerializer()
+    hat_dot_right_left = ImageDetailSerializer()
+    hat_upper_part_left = ImageDetailSerializer()
+    hat_lower_part_left = ImageDetailSerializer()
+    hat_top_button_left = ImageDetailSerializer()
+
+    class Meta:
+        model = models.HatFront
+        fields = ['id', 'name', 'hat_dot_left_left', 'hat_dot_right_left', 'hat_upper_part_left',
+                  'hat_lower_part_left', 'hat_top_button_left']
+
+
+class HatRightDetailSerializer(serializers.ModelSerializer):
+    hat_dot_left_right = ImageDetailSerializer()
+    hat_dot_right_right = ImageDetailSerializer()
+    hat_upper_part_right = ImageDetailSerializer()
+    hat_lower_part_right = ImageDetailSerializer()
+    hat_top_button_right = ImageDetailSerializer()
+
+    class Meta:
+        model = models.HatFront
+        fields = ['id', 'name', 'hat_dot_left_right', 'hat_dot_right_right', 'hat_upper_part_right',
+                  'hat_lower_part_right', 'hat_top_button_right']
+
+
+class HatBackDetailSerializer(serializers.ModelSerializer):
+    hat_dot_left_back = ImageDetailSerializer()
+    hat_dot_right_back = ImageDetailSerializer()
+    hat_upper_part_back = ImageDetailSerializer()
+    hat_lower_strip_back = ImageDetailSerializer()
+
+    class Meta:
+        model = models.HatFront
+        fields = ['id', 'name', 'hat_dot_left_back', 'hat_dot_right_back', 'hat_upper_part_back',
+                  'hat_lower_strip_back']
+
+
+class HatDetailSerializer(serializers.ModelSerializer):
+    front_view_hat = HatFrontDetailSerializer()
+    back_view_hat = HatBackDetailSerializer()
+    left_view_hat = HatLeftDetailSerializer()
+    right_view_hat = HatRightDetailSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name', 'front_view_hat', 'back_view_hat', 'left_view_hat', 'right_view_hat']
+
+
+
+class TowelFrontDetailSerializer(serializers.ModelSerializer):
+    towel_front = ImageDetailSerializer()
+
+    class Meta:
+        model = models.TowelFront
+        fields = ['id', 'name', 'towel_front']
+
+
+class TowelBackDetailSerializer(serializers.ModelSerializer):
+    towel_back = ImageDetailSerializer()
+
+    class Meta:
+        model = models.TowelBack
+        fields = ['id', 'name', 'towel_back']
+
+
+class TowelDetailSerializer(serializers.ModelSerializer):
+    front_view_towel = TowelFrontDetailSerializer()
+    back_view_towel = TowelBackDetailSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name', 'front_view_towel', 'back_view_towel']
 
 
 class PantFrontDetailSerializer(serializers.ModelSerializer):
@@ -57,13 +140,9 @@ class PantFrontDetailSerializer(serializers.ModelSerializer):
 class VestFrontDetailSerializer(serializers.ModelSerializer):
     collar_vest = ImageDetailSerializer()
     zip_vest = ImageDetailSerializer()
-    vest_top_full = ImageDetailSerializer()
-    vest_top_left = ImageDetailSerializer()
-    vest_top_right = ImageDetailSerializer()
-    vest_mid_left = ImageDetailSerializer()
-    vest_mid_right = ImageDetailSerializer()
-    vest_bottom_left = ImageDetailSerializer()
-    vest_bottom_right = ImageDetailSerializer()
+    vest_top = ImageDetailSerializer()
+    vest_mid = ImageDetailSerializer()
+    vest_bottom = ImageDetailSerializer()
     vest_pocket_left = ImageDetailSerializer()
     vest_pocket_right = ImageDetailSerializer()
     vest_hem = ImageDetailSerializer()
@@ -72,14 +151,13 @@ class VestFrontDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.VestFront
-        fields = ['id', 'name', 'collar_vest', 'zip_vest', 'vest_top_full', 'vest_top_left',
-                  'vest_top_right', 'vest_mid_left', 'vest_mid_right', 'vest_bottom_left', 'vest_bottom_right',
+        fields = ['id', 'name', 'collar_vest', 'zip_vest', 'vest_top',
+                  'vest_mid',  'vest_bottom', 'vest_pocket_right',
                   'vest_pocket_left', 'vest_hem', 'vest_left_sleeve', 'vest_right_sleeve']
 
 
 class VestBackDetailSerializer(serializers.ModelSerializer):
     collar_vest_back = ImageDetailSerializer()
-    vest_full_back = ImageDetailSerializer()
     vest_top_back = ImageDetailSerializer()
     vest_mid_back = ImageDetailSerializer()
     vest_bottom_back = ImageDetailSerializer()
@@ -91,10 +169,44 @@ class VestBackDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.VestBack
-        fields = ['id', 'name', 'collar_vest_back', 'vest_full_back', 'vest_top_back', 'vest_mid_back',
+        fields = ['id', 'name', 'collar_vest_back', 'vest_top_back', 'vest_mid_back',
                   'vest_bottom_back', 'vest_pocket_left_back', 'vest_pocket_right_back', 'vest_hem_back',
-                  'vest_bottom_right',
                   'vest_left_sleeve_back', 'vest_right_sleeve_back']
+
+
+class VestDetailSerializer(serializers.ModelSerializer):
+    front_view_vest = VestFrontDetailSerializer()
+    back_view_vest = VestBackDetailSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name', 'front_view_vest', 'back_view_vest']
+
+
+class BagFrontDetailSerializer(serializers.ModelSerializer):
+    bag_handle_front = ImageDetailSerializer()
+    bag_full_front_body = ImageDetailSerializer()
+    bag_top_front_body = ImageDetailSerializer()
+    bag_mid_front_body = ImageDetailSerializer()
+    bag_bottom_front_body = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BagFront
+        fields = ['id', 'name', 'bag_handle_front', 'bag_full_front_body', 'bag_top_front_body', 'bag_mid_front_body',
+                  'bag_bottom_front_body']
+
+
+class BagBackDetailSerializer(serializers.ModelSerializer):
+    bag_handle_back = ImageDetailSerializer()
+    bag_full_back_body = ImageDetailSerializer()
+    bag_top_back_body = ImageDetailSerializer()
+    bag_mid_back_body = ImageDetailSerializer()
+    bag_bottom_back_body = ImageDetailSerializer()
+
+    class Meta:
+        model = models.BagBack
+        fields = ['id', 'name', 'bag_handle_back', 'bag_full_back_body', 'bag_top_back_body', 'bag_mid_back_body',
+                  'bag_bottom_back_body']
 
 
 class BodyDetailSerializer(serializers.ModelSerializer):
@@ -167,6 +279,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'front_view', 'left_view', 'right_view', 'back_view']
 
 
+
 class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductDesign
@@ -178,7 +291,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Category
-        fields = ['id', 'name', 'designs']
+        fields = ['id', 'name', 'key' ,'designs']
 
     def get_designs(self, obj):
         qs = models.ProductDesign.objects.filter(category=obj)
@@ -187,9 +300,14 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
 
 class ProductDesignWithCategorySerializers(serializers.ModelSerializer):
+    key = serializers.SerializerMethodField()
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'display_image']
+        fields = ['id', 'name', 'key','display_image']
+
+    def get_key(self, obj):
+        print(obj.category.key)
+        return obj.category.key
 
 
 class CategoryDetailSerializer(serializers.ModelSerializer):
