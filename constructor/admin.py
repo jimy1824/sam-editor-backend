@@ -23,6 +23,34 @@ class CategoryProductDesignAdmin(admin.ModelAdmin):
         return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
 
 
+@admin.register(ConstructorModels.CoachJacket_Front)
+class CoachJacket_FrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.CoachJacket_Front._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.CoachJacket_Left)
+class CoachJacket_LeftAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.CoachJacket_Left._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.CoachJacket_Right)
+class CoachJacket_RightAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.CoachJacket_Right._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.CoachJacket_Back)
+class CoachJacket_BackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.CoachJacket_Back._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
 @admin.register(ConstructorModels.Body)
 class BodyAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Body._meta.fields]
