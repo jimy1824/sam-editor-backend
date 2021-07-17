@@ -51,6 +51,34 @@ class CoachJacket_BackAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+@admin.register(ConstructorModels.BomberJacket_Front)
+class BomberJacket_FrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BomberJacket_Front._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.BomberJacket_Left)
+class BomberJacket_LeftAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BomberJacket_Left._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.BomberJacket_Right)
+class BomberJacket_RightAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BomberJacket_Right._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.BomberJacket_Back)
+class BomberJacket_BackAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.BomberJacket_Back._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
 @admin.register(ConstructorModels.Body)
 class BodyAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Body._meta.fields]
