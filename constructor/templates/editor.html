@@ -1,0 +1,305 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloth Branding</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/fabric.min.js' %}"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Cloth branding Tabs</h2>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#front" onclick="frontImageLoad()">Front</a></li>
+        <li><a data-toggle="tab" href="#back" onclick="backImageLoad()">Back</a></li>
+        <li><a data-toggle="tab" href="#left" onclick="leftImageLoad()">Left Side</a></li>
+        <li><a data-toggle="tab" href="#right" onclick="rightImageLoad()">Right Side</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="front" class="tab-pane fade in active">
+            <h3>Front View</h3>
+            <p>front.</p>
+            <input type="file" id="image_uploads" name="image_uploads" accept=".png"/>
+            <button onclick="draw()">color</button>
+
+        </div>
+        <div id="back" class="tab-pane fade">
+            <h3>Back View</h3>
+            <p> back</p>
+        </div>
+        <div id="left" class="tab-pane fade">
+            <h3>Left Side View</h3>
+            <p>lef</p>
+        </div>
+        <div id="right" class="tab-pane fade">
+            <h3>Right Side View</h3>
+            <p>right.</p>
+        </div>
+        <canvas id="myCanvas" width="800" height="800" style="border:1px solid #000000;">
+            Your browser does not support the HTML canvas tag.
+        </canvas>
+    </div>
+</div>
+
+
+</body>
+
+
+<script>
+
+    const product = loadProduct()
+    let ORIGINAL_IMAGE_DATA
+
+
+    function loadProduct() {
+        $.ajax({
+            url: '/api/product/3',
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                localStorage.setItem('body', JSON.stringify(data.front_view));
+                localStorage.setItem('back', JSON.stringify(data.back_view));
+                localStorage.setItem('left', JSON.stringify(data.left_view));
+                localStorage.setItem('right', JSON.stringify(data.right_view));
+                // {#frontImageLoad()#}
+            }
+        });
+    };
+    const cacheImageData = () => {
+          const canvas = document.getElementById('myCanvas');
+          const context = canvas.getContext('2d');
+          const original = context.getImageData(0, 0, canvas.width, canvas.height).data
+          ORIGINAL_IMAGE_DATA = new Uint8ClampedArray(original.length)
+          for (let i = 0; i < original.length; i += 1) {
+              ORIGINAL_IMAGE_DATA[i] = original[i]
+          }
+    }
+    const loadImage = (url, imageId, left, top) => {
+        var ctx = document.getElementById('myCanvas').getContext('2d');
+        var img = new Image();
+        img.setAttribute('id', imageId);
+        console.log(imageId,left,top,'kkkkkkkkk')
+        img.onload = function () {
+            ctx.drawImage(img, left, top);
+        //     {#ctx.beginPath();#}
+        //     {#ctx.moveTo(left, top);#}
+        // };
+        // img.src = url;
+        // {#cacheImageData()#}
+    }
+
+    function clearCanvas() {
+        const canvas = document.getElementById('myCanvas');
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, 800, 800);
+        console.log(context)
+    }
+
+    function draw() {
+         const canvas = document.getElementById('myCanvas');
+         var ctx = canvas.getContext("2d");
+         console.log( ctx.getImageData(11,105,20,100))
+          const imgData = ctx.getImageData(106, 105, 122, 214)
+         for (let i = 0; i < imgData.data.length; i +=  4) {
+            imgData.data[i] = 255
+         }
+         ctx.putImageData(imgData, 106, 105)
+         // {#ctx.fillStyle = "#00ff00"#}
+         // {#ctx.fillRect(106,105, 200, 200)#}
+         //  {#var img=document.getElementById('body_first_section')#}
+         //  {#console.log(img)#}
+         //  {#const canvas = document.getElementById('myCanvas');#}
+         //  {#var ctx = canvas.getContext("2d");#}
+         //  {#var img = new Image;#}
+         //  {#img.onload = draw;#}
+         //  {#img.src = "//i.stack.imgur.com/cZ0gC.png";#}
+         //  {##}
+         //  {#// draw color#}
+         //  {#ctx.fillStyle = "#09f";#}
+         //  {#ctx.fillRect(0, 0, 200, 200);#}
+         //  {##}
+         //  {#// set composite mode#}
+         //  {#ctx.globalCompositeOperation = "destination-in";#}
+         //  {##}
+         //  {#// draw image#}
+         //  {#ctx.drawImage(this, 0, 0);#}
+    }
+    function changeColor(img, hue, sat, l, x, y, width, height)
+   {
+    const canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext("2d");
+    context.clearRect(x, y, width, height);
+    context.globalCompositeOperation = "source-over";
+    context.drawImage(img, x, y, width, height);
+
+    var lcombo = false;
+    if (lcombo) {
+     context.globalCompositeOperation = "color";
+     context.fillStyle = "hsl(" + hue + "," + sat + "%, 50%)";
+     context.fillRect(x, y, width, height);
+     context.clearRect(x, y, width, height);
+    } else {
+     context.globalCompositeOperation = l < 100 ? "color-burn" : "color-dodge";
+     l = l >= 100 ? l - 100 : 100 - (100 - l);
+     context.fillStyle = "hsl(0, 50%, " + l + "%)";
+
+     context.globalCompositeOperation = "saturation";
+     context.fillStyle = "hsl(0," + sat + "%, 50%)";
+     context.fillRect(x, y, width, height);
+
+     context.globalCompositeOperation = "hue"; //hue
+     context.fillStyle = "hsl(" + hue + ",1%, 50%)";
+    }
+    context.globalCompositeOperation = "destination-in";
+    context.globalCompositeOperation = "source-over";
+   }
+
+    function frontImageLoad() {
+        console.log('front')
+        clearCanvas()
+        let body = JSON.parse(localStorage.getItem('body'))
+        if (body.body_first_section?.image) {
+            loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
+        }
+        if (body.body_second_section?.image) {
+            loadImage(body.front_view.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.front_view.body_second_section.y_point)
+        }
+        if (body.body_third_section?.image) {
+            loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+
+        }
+        if (body.collar?.image) {
+            loadImage(body.collar.image, 'front-collar', body.collar.x_point, body.collar.y_point)
+
+        }
+        if (body.right_sleeve?.image) {
+            loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
+        }
+
+        if (body.left_sleeve?.image) {
+            loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
+        }
+    }
+
+    function backImageLoad() {
+        clearCanvas()
+        let back = JSON.parse(localStorage.getItem('back'))
+        if (back.back_first_part?.image) {
+            loadImage(
+                back.back_first_part.image,
+                'back_first_part',
+                back.back_first_part.x_point,
+                back.back_first_part.y_point,
+            )
+        }
+
+        if (back.back_second_part?.image) {
+            loadImage(
+                back.back_second_part.image,
+                'back_second_part',
+                back.back_second_part.x_point,
+                back.back_second_part.y_point,
+            )
+        }
+
+        if (back.back_third_part?.image) {
+            loadImage(
+                back.back_third_part.image,
+                'back_third_part',
+                back.back_third_part.x_point,
+                back.back_third_part.y_point,
+            )
+        }
+
+        if (back.back_left_sleeve?.image) {
+            console.log(back.back_left_sleeve, 'back.back_left_sleeve?')
+            loadImage(
+                back.back_left_sleeve.image,
+                'back_left_sleeve',
+                back.back_left_sleeve.x_point,
+                back.back_left_sleeve.y_point,
+            )
+        }
+
+        if (back.back_right_sleeve?.image) {
+            loadImage(
+                back.back_right_sleeve.image,
+                'back_right_sleeve',
+                back.back_right_sleeve.x_point,
+                back.back_right_sleeve.y_point,
+            )
+        }
+    }
+
+    function leftImageLoad() {
+        clearCanvas()
+        let left = JSON.parse(localStorage.getItem('left'))
+
+        if (left.left_v_body_view?.image) {
+            loadImage(
+                left.left_v_body_view.image,
+                'left_v_body_view',
+                left.left_v_body_view.x_point,
+                left.left_v_body_view.y_point,
+                left.left_v_body_view.width,
+            )
+        }
+
+        if (left.left_v_upper_part?.image) {
+            loadImage(
+                left.left_v_upper_part.image,
+                'left_v_upper_part',
+                left.left_v_upper_part.x_point,
+                left.left_v_upper_part.y_point,
+            )
+        }
+
+        if (left.left_v_lower_part?.image) {
+            loadImage(
+                left.left_v_lower_part.image,
+                'left_v_upper_part',
+                left.left_v_lower_part.x_point,
+                left.left_v_lower_part.y_point,
+                left.left_v_lower_part.width,
+            )
+        }
+    }
+
+    function rightImageLoad() {
+        clearCanvas()
+        let right = JSON.parse(localStorage.getItem('right'))
+
+        if (right.right_v_body_view?.image) {
+            loadImage(
+                right.right_v_body_view.image,
+                'right_v_body_view',
+                right.right_v_body_view.x_point,
+                right.right_v_body_view.y_point,
+            )
+        }
+        if (right.right_v_upper_part?.image) {
+            loadImage(
+                right.right_v_upper_part.image,
+                'right_v_upper_part',
+                right.right_v_upper_part.x_point,
+                right.right_v_upper_part.y_point,
+            )
+        }
+
+        if (right.right_v_lower_part?.image) {
+            loadImage(
+                right.right_v_lower_part.image,
+                'right_v_lower_part',
+                right.right_v_lower_part.x_point,
+                right.right_v_lower_part.y_point,
+            )
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,649 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloth Branding</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/konva@8/konva.min.js"></script>
+    <script src="{% static 'js/fabric.min.js' %}"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Cloth branding Tabs</h2>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#front" onclick="frontImageLoad()">Front</a></li>
+        <li><a data-toggle="tab" href="#back" onclick="backImageLoad()">Back</a></li>
+        <li><a data-toggle="tab" href="#left" onclick="leftImageLoad()">Left Side</a></li>
+        <li><a data-toggle="tab" href="#right" onclick="rightImageLoad()">Right Side</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="front" class="tab-pane fade in active">
+            <h3>Front View</h3>
+<<<<<<< Updated upstream
+            <p>f.</p>
+            <p>Select Collar Color</p>
+            <button onclick="draw()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <br>
+            <p>Select Body Color</p>
+            <button onclick="drawBody()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="drawBody()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="drawBody()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
+
+=======
+            <p>front.</p>
+            <form method="post" action="" class="js-form-create-form">
+                  <label for="favcolor">Select your favorite color:</label>
+                  <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><br>
+                  <input type="submit">
+             </form>
+            <button onclick="draw()">color</button>
+>>>>>>> Stashed changes
+        </div>
+
+        <div id="back" class="tab-pane fade">
+            <h3>Back View</h3>
+            <p> back</p>
+            <button onclick="drawBack()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="drawBack()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="drawBack()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
+        </div>
+
+        <div id="left" class="tab-pane fade">
+            <h3>Left Side View</h3>
+            <p>lef</p>
+            <button onclick="draw()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
+        </div>
+
+        <div id="right" class="tab-pane fade">
+            <h3>Right Side View</h3>
+            <p>right.</p>
+            <button onclick="draw()" style="border-radius: 50%; background-color: red; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: blue; height: 30px; width: 30px; border-color: white"></button>
+            <button onclick="draw()" style="border-radius: 50%; background-color: green; height: 30px; width: 30px; border-color: white"></button>
+            <input type="file" name="upload_img" accept=".png" onchange="loadFile(event)"/>
+        </div>
+        <!--{#        <canvas id="myCanvas" width="800" height="800" style="border:1px solid #000000;">#}-->
+        <!--{#            Your browser does not support the HTML canvas tag.#}-->
+        <!--{#        </canvas>#}-->
+        <div id="myCanvas-container" style="align-content: center;position:relative">
+
+            <div id="mydiv" style="position: absolute">
+                <img id="uploaded_img" width="50px" draggable="true"/>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+<script>
+
+    const product = loadProduct()
+    let colorCode
+
+
+    function loadProduct() {
+        $.ajax({
+            url: '/api/product/3',
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                localStorage.setItem('body', JSON.stringify(data.front_view));
+                localStorage.setItem('back', JSON.stringify(data.back_view));
+                localStorage.setItem('left', JSON.stringify(data.left_view));
+                localStorage.setItem('right', JSON.stringify(data.right_view));
+                // {#frontImageLoad()#}
+            }
+        });
+    };
+
+    dragElement(document.getElementById("myCanvas-container"));
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+        elmnt.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
+
+    var loadFile = function (event) {
+        var image = document.getElementById('uploaded_img');
+        image.src = URL.createObjectURL(event.target.files[0]);
+        console.log(event.target.files[0])
+
+         var width = window.innerWidth;
+      var height = window.innerHeight;
+
+      function update(activeAnchor) {
+        var group = activeAnchor.getParent();
+
+        var topLeft = group.get('.topLeft')[0];
+        var topRight = group.get('.topRight')[0];
+        var bottomRight = group.get('.bottomRight')[0];
+        var bottomLeft = group.get('.bottomLeft')[0];
+        var image = group.get('Image')[0];
+
+        var anchorX = activeAnchor.getX();
+        var anchorY = activeAnchor.getY();
+
+        // update anchor positions
+        switch (activeAnchor.getName()) {
+          case 'topLeft':
+            topRight.y(anchorY);
+            bottomLeft.x(anchorX);
+            break;
+          case 'topRight':
+            topLeft.y(anchorY);
+            bottomRight.x(anchorX);
+            break;
+          case 'bottomRight':
+            bottomLeft.y(anchorY);
+            topRight.x(anchorX);
+            break;
+          case 'bottomLeft':
+            bottomRight.y(anchorY);
+            topLeft.x(anchorX);
+            break;
+        }
+
+        image.position(topLeft.position());
+
+        var width = topRight.getX() - topLeft.getX();
+        var height = bottomLeft.getY() - topLeft.getY();
+        if (width && height) {
+          image.width(width);
+          image.height(height);
+        }
+      }
+      function addAnchor(group, x, y, name) {
+        var stage = group.getStage();
+        var layer = group.getLayer();
+
+        var anchor = new Konva.Circle({
+          x: x,
+          y: y,
+          stroke: '#666',
+          fill: '#ddd',
+          strokeWidth: 2,
+          radius: 8,
+          name: name,
+          draggable: true,
+          dragOnTop: false,
+        });
+
+        anchor.on('dragmove', function () {
+          update(this);
+        });
+        anchor.on('mousedown touchstart', function () {
+          group.draggable(false);
+          this.moveToTop();
+        });
+        anchor.on('dragend', function () {
+          group.draggable(true);
+        });
+        // add hover styling
+        anchor.on('mouseover', function () {
+          var layer = this.getLayer();
+          document.body.style.cursor = 'pointer';
+          this.strokeWidth(4);
+        });
+        anchor.on('mouseout', function () {
+          var layer = this.getLayer();
+          document.body.style.cursor = 'default';
+          this.strokeWidth(2);
+        });
+
+        group.add(anchor);
+      }
+
+      var stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height,
+      });
+
+      var layer = new Konva.Layer();
+      stage.add(layer);
+
+      // darth vader
+      var darthVaderImg = new Konva.Image({
+        width: 200,
+        height: 137,
+      });
+
+      // yoda
+      var yodaImg = new Konva.Image({
+        width: 93,
+        height: 104,
+      });
+
+      var darthVaderGroup = new Konva.Group({
+        x: 180,
+        y: 50,
+        draggable: true,
+      });
+      layer.add(darthVaderGroup);
+      darthVaderGroup.add(darthVaderImg);
+      addAnchor(darthVaderGroup, 0, 0, 'topLeft');
+      addAnchor(darthVaderGroup, 200, 0, 'topRight');
+      addAnchor(darthVaderGroup, 200, 138, 'bottomRight');
+      addAnchor(darthVaderGroup, 0, 138, 'bottomLeft');
+
+      var yodaGroup = new Konva.Group({
+        x: 20,
+        y: 110,
+        draggable: true,
+      });
+      layer.add(yodaGroup);
+      yodaGroup.add(yodaImg);
+      addAnchor(yodaGroup, 0, 0, 'topLeft');
+      addAnchor(yodaGroup, 93, 0, 'topRight');
+      addAnchor(yodaGroup, 93, 104, 'bottomRight');
+      addAnchor(yodaGroup, 0, 104, 'bottomLeft');
+
+
+
+
+        // console.log(event.target.files[0])
+        // var image_file = new fabric.Image({
+        //     left:0,
+        //     top:0,
+        //     width:200,
+        //     height:200,
+        // })
+
+         // canvas.add(image_file)
+         // canvas.setActiveObject(image_file)
+    }
+
+    const addLayer = (layerId) => {
+        var canvas = document.createElement("canvas");
+        canvas.id = layerId;
+        canvas.width = 500;
+        canvas.height = 400;
+        canvas.style.cssText = "position:absolute;left:0;top:0";
+        document.getElementById("myCanvas-container").appendChild(canvas);
+
+    }
+    const loadImage = (url, imageId, left, top) => {
+        var canvas = document.createElement("canvas");
+        canvas.id = imageId;
+        canvas.width = 800;
+        canvas.height = 800;
+        canvas.style.cssText = "position:absolute;left:0;top:0";
+        // {#canvas.style.cssText = "left:0;top:0";#}
+        document.getElementById("myCanvas-container").appendChild(canvas);
+
+        var ctx = canvas.getContext('2d');
+        var img = new Image();
+        img.setAttribute('id', imageId);
+        img.onload = function () {
+            ctx.drawImage(img, left, top);
+            // {#ctx.beginPath();#}
+            // {#ctx.moveTo(left, top);#}
+        };
+        img.src = url;
+        // {#cacheImageData()#}
+    }
+
+    function clearCanvas() {
+        var allCanvas = document.getElementsByTagName('canvas');
+        for (var i = 0; i < allCanvas.length; i++) {
+            console.log(allCanvas[i])
+            const context = allCanvas[i].getContext('2d')
+            context.clearRect(0, 0, 800, 800)
+        }
+    }
+
+    function getColorCode() {
+            var form = $(this);
+            colorCode=form[0].favcolor.value
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(colorCode);
+            colorCode= result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+              } : null;
+            console.log('lllll',colorCode)
+            return false;
+    }
+    $(".js-form-create-form").on("submit", getColorCode);
+
+    function draw() {
+<<<<<<< Updated upstream
+        const canvas = document.getElementById('front-collar');
+        console.log(canvas)
+        var context = canvas.getContext("2d");
+        const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+        for (let i = 0; i < imgData.data.length; i += 4) {
+            imgData.data[i] = 255
+        }
+        context.putImageData(imgData, 0, 0)
+
+
+        // {#const imgData = ctx.getImageData(0, 0, 400, 100)#}
+        // {#for (let i = 0; i < imgData.data.length; i +=  4) {#}
+        // {#   imgData.data[i] = 255#}
+
+        // {#ctx.putImageData(imgData, 0, 0)#}
+        // {#ctx.fillStyle = "#00ff00"#}
+        // {#ctx.fillRect(0,0, 200, 200)#}
+        //  {#var img=document.getElementById('body_first_section')#}
+        //
+        //  {#const canvas = document.getElementById('myCanvas');#}
+        //  {#var ctx = canvas.getContext("2d");#}
+        //  {#var img = new Image;#}
+        //  {#img.onload = draw;#}
+        //  {#img.src = "//i.stack.imgur.com/cZ0gC.png";#}
+        //  {##}
+        //  {#// draw color#}
+        //  {#ctx.fillStyle = "#09f";#}
+        //  {#ctx.fillRect(0, 0, 200, 200);#}
+        //  {##}
+        //  {#// set composite mode#}
+        //  {#ctx.globalCompositeOperation = "destination-in";#}
+        //  {##}
+        //  {#// draw image#}
+        //  {#ctx.drawImage(this, 0, 0);#}
+    }
+    //  const el = document.querySelector("#uploaded_img");
+    // console.log(el,"drag")
+    // el.addEventListener('mousedown', mousedown);
+    // function mousedown(e){
+    //     window.addEventListener('mousemove', mousemove);
+    //     window.addEventListener('mouseup', mouseup);
+    //
+    //     let prevX = e.clientX;
+    //     let prevY = e.clientY;
+    //
+    //     function mousemove(e){
+    //         let newX = prevX - e.clientX;
+    //         let newY = prevY - e.clientY;
+    //
+    //         const img = el.getBoundingClientRect();
+    //         el.style.left = img.left - newX + "px";
+    //         el.style.top = img.top - newY + "px";
+    //
+    //         prevX = e.clientX;
+    //         prevY = e.clientY;
+    //
+    //     }
+    //
+    //     function mouseup(e){
+    //
+    //     }
+    // }
+
+
+
+
+    function drawBody(){
+        const canvas = document.getElementById('body_first_section');
+        console.log(canvas)
+        var context = canvas.getContext("2d");
+        const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+        for (let i = 0; i < imgData.data.length; i += 4) {
+            imgData.data[i] = 255
+        }
+        context.putImageData(imgData, 0, 0)
+    }
+
+    function drawBack(){
+        const canvas = document.getElementById('back_second_part');
+        console.log(canvas)
+        var context = canvas.getContext("2d");
+        const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+        for (let i = 0; i < imgData.data.length; i += 4) {
+            imgData.data[i] = 255
+        }
+        context.putImageData(imgData, 0, 0)
+=======
+         const canvas = document.getElementById('front-collar');
+         console.log(canvas)
+         var context = canvas.getContext("2d");
+         const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+         for (let i = 0; i < imgData.data.length; i += 4) {
+            {#imgData.data[i] = 255#}
+            {# console.log(imgData.data[i])#}
+             console.log(imgData.data[i+1])
+             {#console.log(imgData.data[i+2])#}
+            {#imgData.data[i] = `rgb(#}
+            {#            ${Math.floor(255 - 42.5 * i)},#}
+            {#            ${Math.floor(255 - 42.5 * i)},#}
+            {#            0)`#}
+         }
+         context.putImageData(imgData, 0, 0)
+
+
+         {#const imgData = ctx.getImageData(0, 0, 400, 100)#}
+         {#for (let i = 0; i < imgData.data.length; i +=  4) {#}
+         {#   imgData.data[i] = 255#}
+
+         {#ctx.putImageData(imgData, 0, 0)#}
+         {#ctx.fillStyle = "#00ff00"#}
+         {#ctx.fillRect(0,0, 200, 200)#}
+          {#var img=document.getElementById('body_first_section')#}
+
+          {#const canvas = document.getElementById('myCanvas');#}
+          {#var ctx = canvas.getContext("2d");#}
+          {#var img = new Image;#}
+          {#img.onload = draw;#}
+          {#img.src = "//i.stack.imgur.com/cZ0gC.png";#}
+          {##}
+          {#// draw color#}
+          {#ctx.fillStyle = "#09f";#}
+          {#ctx.fillRect(0, 0, 200, 200);#}
+          {##}
+          {#// set composite mode#}
+          {#ctx.globalCompositeOperation = "destination-in";#}
+          {##}
+          {#// draw image#}
+          {#ctx.drawImage(this, 0, 0);#}
+>>>>>>> Stashed changes
+    }
+
+    // function draw1() {
+    //     const canvas = document.getElementById('front-collar');
+    //     console.log(canvas)
+    //     var context = canvas.getContext("2d");
+    //     const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+    //     for (let i = 0; i < imgData.data.length; i += 4) {
+    //         imgData.data[i+1] = 255
+    //     }
+    //     context.putImageData(imgData, 0, 0)
+    // }
+    //
+    // function draw2() {
+    //     const canvas = document.getElementById('front-collar');
+    //     console.log(canvas)
+    //     var context = canvas.getContext("2d");
+    //     const imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+    //     for (let i = 0; i < imgData.data.length; i += 4) {
+    //         imgData.data[i+1] = 255
+    //     }
+    //     context.putImageData(imgData, 0, 0)
+    // }
+
+    function frontImageLoad() {
+        clearCanvas()
+        let body = JSON.parse(localStorage.getItem('body'))
+        if (body.body_first_section?.image) {
+            loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
+        }
+        if (body.body_second_section?.image) {
+            loadImage(body.front_view.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.front_view.body_second_section.y_point)
+        }
+        if (body.body_third_section?.image) {
+            loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+
+        }
+        if (body.collar?.image) {
+            loadImage(body.collar.image, 'front-collar', body.collar.x_point, body.collar.y_point)
+
+        }
+        if (body.right_sleeve?.image) {
+            loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
+        }
+
+        if (body.left_sleeve?.image) {
+            loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
+        }
+    }
+
+    function backImageLoad() {
+        clearCanvas()
+        let back = JSON.parse(localStorage.getItem('back'))
+        if (back.back_first_part?.image) {
+            loadImage(
+                back.back_first_part.image,
+                'back_first_part',
+                back.back_first_part.x_point,
+                back.back_first_part.y_point,
+            )
+        }
+
+        if (back.back_second_part?.image) {
+            loadImage(
+                back.back_second_part.image,
+                'back_second_part',
+                back.back_second_part.x_point,
+                back.back_second_part.y_point,
+            )
+        }
+
+        if (back.back_third_part?.image) {
+            loadImage(
+                back.back_third_part.image,
+                'back_third_part',
+                back.back_third_part.x_point,
+                back.back_third_part.y_point,
+            )
+        }
+
+        if (back.back_left_sleeve?.image) {
+            loadImage(
+                back.back_left_sleeve.image,
+                'back_left_sleeve',
+                back.back_left_sleeve.x_point,
+                back.back_left_sleeve.y_point,
+            )
+        }
+
+        if (back.back_right_sleeve?.image) {
+            loadImage(
+                back.back_right_sleeve.image,
+                'back_right_sleeve',
+                back.back_right_sleeve.x_point,
+                back.back_right_sleeve.y_point,
+            )
+        }
+    }
+
+    function leftImageLoad() {
+        clearCanvas()
+        let left = JSON.parse(localStorage.getItem('left'))
+
+        if (left.left_v_body_view?.image) {
+            loadImage(
+                left.left_v_body_view.image,
+                'left_v_body_view',
+                left.left_v_body_view.x_point,
+                left.left_v_body_view.y_point,
+                left.left_v_body_view.width,
+            )
+        }
+
+        if (left.left_v_upper_part?.image) {
+            loadImage(
+                left.left_v_upper_part.image,
+                'left_v_upper_part',
+                left.left_v_upper_part.x_point,
+                left.left_v_upper_part.y_point,
+            )
+        }
+
+        if (left.left_v_lower_part?.image) {
+            loadImage(
+                left.left_v_lower_part.image,
+                'left_v_upper_part',
+                left.left_v_lower_part.x_point,
+                left.left_v_lower_part.y_point,
+                left.left_v_lower_part.width,
+            )
+        }
+    }
+
+    function rightImageLoad() {
+        clearCanvas()
+        let right = JSON.parse(localStorage.getItem('right'))
+
+        if (right.right_v_body_view?.image) {
+            loadImage(
+                right.right_v_body_view.image,
+                'right_v_body_view',
+                right.right_v_body_view.x_point,
+                right.right_v_body_view.y_point,
+            )
+        }
+        if (right.right_v_upper_part?.image) {
+            loadImage(
+                right.right_v_upper_part.image,
+                'right_v_upper_part',
+                right.right_v_upper_part.x_point,
+                right.right_v_upper_part.y_point,
+            )
+        }
+
+        if (right.right_v_lower_part?.image) {
+            loadImage(
+                right.right_v_lower_part.image,
+                'right_v_lower_part',
+                right.right_v_lower_part.x_point,
+                right.right_v_lower_part.y_point,
+            )
+        }
+    }
+
+</script>
+</html>
