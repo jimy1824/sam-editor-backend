@@ -13,7 +13,7 @@ class ImageDetailSerializer(serializers.ModelSerializer):
         return 'http://localhost:8000' + obj.image.url
 
 
-class ApronDetailSerializer(serializers.ModelSerializer):
+class ApronFrontDetailSerializer(serializers.ModelSerializer):
     collar_strip = ImageDetailSerializer()
     collar_strip_side = ImageDetailSerializer()
     bukkle = ImageDetailSerializer()
@@ -26,6 +26,14 @@ class ApronDetailSerializer(serializers.ModelSerializer):
         model = models.Apron
         fields = ['id', 'name', 'collar_strip', 'collar_strip_side', 'bukkle', 'body', 'left_strip', 'right_strip',
                   'pocket']
+
+
+class ApronDetailSerializer(serializers.ModelSerializer):
+    front_view_apron = ApronFrontDetailSerializer()
+
+    class Meta:
+        model = models.ProductDesign
+        fields = ['id', 'name', 'front_view_apron']
 
 
 class HatFrontDetailSerializer(serializers.ModelSerializer):
