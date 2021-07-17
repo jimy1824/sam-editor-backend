@@ -17,15 +17,19 @@ class ApronFrontDetailSerializer(serializers.ModelSerializer):
     collar_strip = ImageDetailSerializer()
     collar_strip_side = ImageDetailSerializer()
     bukkle = ImageDetailSerializer()
-    body = ImageDetailSerializer()
+    appren_body = serializers.SerializerMethodField()
     left_strip = ImageDetailSerializer()
     right_strip = ImageDetailSerializer()
     pocket = ImageDetailSerializer()
 
     class Meta:
         model = models.Apron
-        fields = ['id', 'name', 'collar_strip', 'collar_strip_side', 'bukkle', 'body', 'left_strip', 'right_strip',
+        fields = ['id', 'name', 'collar_strip', 'collar_strip_side', 'bukkle', 'appren_body', 'left_strip', 'right_strip',
                   'pocket']
+
+    def get_appren_body(self, obj):
+        serializer = ImageDetailSerializer(obj.body)
+        return serializer.data
 
 
 class ApronDetailSerializer(serializers.ModelSerializer):
