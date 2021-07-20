@@ -10,7 +10,8 @@ class ImageDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'image', 'x_point', 'y_point', 'width', 'height']
 
     def get_image(self, obj):
-        return 'http://localhost:8000' + obj.image.url
+        # return 'http://localhost:8000' + obj.image.url
+        return 'http://44.192.67.250' + obj.image.url
 
 
 class ApronFrontDetailSerializer(serializers.ModelSerializer):
