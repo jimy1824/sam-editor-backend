@@ -47,6 +47,8 @@ class DesignImages(TimeStampedModel):
     image = models.ImageField(upload_to='uploads/body')
 
     class Meta:
+        verbose_name = 'Graphics for Customer'
+        verbose_name_plural = 'Graphics for Customer'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
