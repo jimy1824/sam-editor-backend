@@ -19,6 +19,8 @@ class Category(TimeStampedModel):
     order = models.IntegerField(default=1, )
 
     class Meta:
+        verbose_name = 'Categories'
+        verbose_name_plural = 'Categories'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -73,6 +75,8 @@ class Body(TimeStampedModel):
     left_sleeve = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='l_sleeve')
 
     class Meta:
+        verbose_name = 'Front Shirt'
+        verbose_name_plural = 'Front Shirt'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -878,6 +882,8 @@ class BaseBallJacket_Front(TimeStampedModel):
     # Front Right Sleeve Cuff End
 
     class Meta:
+        verbose_name = 'Baseball Jacket Front'
+        verbose_name_plural = 'Baseball Jacket Front'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -930,6 +936,8 @@ class BaseBallJacket_Left(TimeStampedModel):
     # Base Ball Jacket Right Sleeve Left End
 
     class Meta:
+        verbose_name = 'Baseball Jacket Left'
+        verbose_name_plural = 'Baseball Jacket Left'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -983,6 +991,8 @@ class BaseBallJacket_Right(TimeStampedModel):
     # Base Ball Jacket Right Sleeve Left End
 
     class Meta:
+        verbose_name = 'Baseball Jacket Rightt'
+        verbose_name_plural = 'Baseball Jacket Right'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -1035,6 +1045,8 @@ class BaseBallJacket_Back(TimeStampedModel):
     # Back Right Sleeve End
 
     class Meta:
+        verbose_name = 'Baseball Jacket Back'
+        verbose_name_plural = 'Baseball Jacket Back'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -1059,6 +1071,8 @@ class BaseBallShirt_Front(TimeStampedModel):
                                                   related_name='base_b_shirt_button_front', null=True, blank=True)
 
     class Meta:
+        verbose_name = 'Baseball Shirt Front'
+        verbose_name_plural = 'Baseball Shirt Front'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -1082,6 +1096,8 @@ class BaseBallShirt_Left(TimeStampedModel):
                                                         blank=True)
 
     class Meta:
+        verbose_name = 'Baseball Shirt Left'
+        verbose_name_plural = 'Baseball Shirt Left'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -1105,6 +1121,8 @@ class BaseBallShirt_Right(TimeStampedModel):
                                                          blank=True)
 
     class Meta:
+        verbose_name = 'Baseball Shirt Right'
+        verbose_name_plural = 'Baseball Shirt Right'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -1125,6 +1143,8 @@ class BaseBallShirt_Back(TimeStampedModel):
                                                        blank=True)
 
     class Meta:
+        verbose_name = 'Baseball Shirt Back'
+        verbose_name_plural = 'Baseball Shirt Back'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -1465,6 +1485,8 @@ class LeftView(TimeStampedModel):
                                              null=True, blank=True)
 
     class Meta:
+        verbose_name = 'Shirt Left'
+        verbose_name_plural = 'Shirt Left'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -1493,6 +1515,8 @@ class RightView(TimeStampedModel):
                                               null=True, blank=True)
 
     class Meta:
+        verbose_name = 'Shirt Right'
+        verbose_name_plural = 'Shirt Right'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
@@ -1514,6 +1538,8 @@ class BackView(TimeStampedModel):
                                           blank=True, null=True)
 
     class Meta:
+        verbose_name = 'Shirt Back'
+        verbose_name_plural = 'Shirt Back'
         get_latest_by = 'updated_at'
         ordering = ('-updated_at', '-created_at',)
 
