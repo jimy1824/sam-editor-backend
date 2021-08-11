@@ -39,8 +39,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'constructor.apps.ConstructorConfig',
+    'api',
+#     packages
+    'rest_framework',
+    'colorfield',
     'corsheaders',
-    'api'
+
+    # auth
+    'rest_framework.authtoken',
+    # 'rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    # 'rest_auth.registration',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.twitter',
+    'allauth.socialaccount.providers.google',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +163,37 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000',
     'http://localhost:3000',
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.TokenAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    ],
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'constructor.serializers.RegisterSerializer',
+}
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'clothing'
+
+
+SITE_ID = 1
+
+AUTH_USER_MODEL = 'constructor.CustomUser'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_UNIQUE_EMAIL = True
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'nitrrrx@gmail.com'
+EMAIL_HOST_PASSWORD = 'pakistan_1824'
