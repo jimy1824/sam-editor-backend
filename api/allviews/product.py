@@ -3,6 +3,7 @@ from constructor import models
 from api.serializers import product_serializer, logo_serializer
 
 from rest_framework.decorators import action
+from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 
 
@@ -134,3 +135,21 @@ class LogoView(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+    @action(detail=False, methods=['post'], name='upload_logo', url_path='upload_logo')
+    def upload_logo(self, request, *args, **kwargs):
+        """
+        Returns list of courses by country`.
+        """
+
+        try:
+           file = request.data['file']
+           obj = models.DesignImages(image=file, name=file.name)
+           obj.save()
+           serializer = self.get_serializer(models.DesignImages.objects.all(), many=True)
+        except KeyError:
+            raise ParseError ("File is not Attached")
+
+        return Response(serializer.data)
+
+

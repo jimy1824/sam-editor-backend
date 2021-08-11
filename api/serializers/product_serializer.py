@@ -4,14 +4,21 @@ from constructor import models
 
 class ImageDetailSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
+    type=serializers.SerializerMethodField()
 
     class Meta:
         model = models.ImageField
-        fields = ['id', 'name', 'image', 'x_point', 'y_point', 'width', 'height']
+        fields = ['id', 'name', 'image', 'x_point', 'y_point', 'width', 'height','type']
 
     def get_image(self, obj):
         # return 'http://localhost:8000' + obj.image.url
         return 'http://44.192.67.250' + obj.image.url
+
+    def get_type(self, obj):
+        if self.context.get('type'):
+            return self.context.get('type')
+        return None
+
 
 
 class ApronFrontDetailSerializer(serializers.ModelSerializer):
@@ -260,14 +267,21 @@ class BodyDetailSerializer(serializers.ModelSerializer):
     body_third_section = ImageDetailSerializer()
     collar = ImageDetailSerializer()
     hem = ImageDetailSerializer()
-    right_sleeve = ImageDetailSerializer()
-    left_sleeve = ImageDetailSerializer()
+    right_sleeve = serializers.SerializerMethodField()
+    left_sleeve = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Body
         fields = ['id', 'name', 'body_view', 'body_first_section', 'body_second_section', 'body_third_section',
                   'collar', 'hem', 'right_sleeve', 'left_sleeve']
 
+    def get_right_sleeve(self, obj):
+        serializer =  ImageDetailSerializer(obj.right_sleeve,context={'type':'sleeve'})
+        return serializer.data
+
+    def get_left_sleeve(self, obj):
+        serializer =  ImageDetailSerializer(obj.left_sleeve,context={'type':'sleeve'})
+        return serializer.data
 
 class LeftViewSerializer(serializers.ModelSerializer):
     left_v_body_view = ImageDetailSerializer()
@@ -303,14 +317,21 @@ class BackViewSerializer(serializers.ModelSerializer):
     back_first_part = ImageDetailSerializer()
     back_second_part = ImageDetailSerializer()
     back_third_part = ImageDetailSerializer()
-    back_left_sleeve = ImageDetailSerializer()
-    back_right_sleeve = ImageDetailSerializer()
+    back_left_sleeve = serializers.SerializerMethodField()
+    back_right_sleeve = serializers.SerializerMethodField()
 
     class Meta:
         model = models.LeftView
         fields = ['id', 'name', 'back_first_part', 'back_second_part', 'back_third_part', 'back_left_sleeve',
                   'back_right_sleeve']
 
+    def get_back_left_sleeve(self, obj):
+        serializer =  ImageDetailSerializer(obj.back_left_sleeve,context={'type':'sleeve'})
+        return serializer.data
+
+    def get_back_right_sleeve(self, obj):
+        serializer =  ImageDetailSerializer(obj.back_right_sleeve,context={'type':'sleeve'})
+        return serializer.data
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     front_view = BodyDetailSerializer()
