@@ -49,7 +49,10 @@ urlpatterns = [
     path('api/password/reset/', PasswordResetView.as_view(), name='rest_password_reset'),
 
     path('api/rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
-    path('api/rest-auth/google/', GoogleLogin.as_view(), name='google_login')
+    path('api/rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
+
+
+    path('accounts/', include('allauth.urls')),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
