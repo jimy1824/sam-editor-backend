@@ -29,6 +29,23 @@ class CustomUserAdmin(admin.ModelAdmin):
     search_fields = ['id', 'email']
 
 
+
+
+@admin.register(ConstructorModels.Fabric)
+class FabricAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.Fabric._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+    filter_horizontal = ('colors',)
+
+
+@admin.register(ConstructorModels.Color)
+class ColorAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.Color._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
 @admin.register(ConstructorModels.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Category._meta.fields]
@@ -41,6 +58,7 @@ class CategoryProductDesignAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'display_image_tag']
     ordering = ['id']
     search_fields = ('name',)
+    filter_horizontal = ('fabrics',)
     change_form_template = 'admin/admin_customization.html'
 
     def display_image_tag(self, obj):

@@ -4,11 +4,12 @@ from constructor import models
 
 class ImageDetailSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
-    type=serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    color = serializers.SerializerMethodField()
 
     class Meta:
         model = models.ImageField
-        fields = ['id', 'name', 'image', 'x_point', 'y_point', 'width', 'height','type']
+        fields = ['id', 'name', 'image', 'color', 'x_point', 'y_point', 'width', 'height', 'type']
 
     def get_image(self, obj):
         # return 'http://localhost:8000' + obj.image.url
@@ -19,6 +20,8 @@ class ImageDetailSerializer(serializers.ModelSerializer):
             return self.context.get('type')
         return None
 
+    def get_color(self, obj):
+        return None
 
 
 class ApronFrontDetailSerializer(serializers.ModelSerializer):
@@ -32,7 +35,8 @@ class ApronFrontDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Apron
-        fields = ['id', 'name', 'collar_strip', 'collar_strip_side', 'bukkle', 'appren_body', 'left_strip', 'right_strip',
+        fields = ['id', 'name', 'collar_strip', 'collar_strip_side', 'bukkle', 'appren_body', 'left_strip',
+                  'right_strip',
                   'pocket']
 
     def get_appren_body(self, obj):
@@ -267,21 +271,22 @@ class BodyDetailSerializer(serializers.ModelSerializer):
     body_third_section = ImageDetailSerializer()
     collar = ImageDetailSerializer()
     hem = ImageDetailSerializer()
-    right_sleeve = serializers.SerializerMethodField()
-    left_sleeve = serializers.SerializerMethodField()
+    right_sleeve = ImageDetailSerializer(context={'type': 'sleeve'})
+    left_sleeve = ImageDetailSerializer(context={'type': 'sleeve'})
 
     class Meta:
         model = models.Body
         fields = ['id', 'name', 'body_view', 'body_first_section', 'body_second_section', 'body_third_section',
                   'collar', 'hem', 'right_sleeve', 'left_sleeve']
 
-    def get_right_sleeve(self, obj):
-        serializer =  ImageDetailSerializer(obj.right_sleeve,context={'type':'sleeve'})
-        return serializer.data
+    # def get_right_sleeve(self, obj):
+    #     serializer = ImageDetailSerializer(obj.right_sleeve, context={'type': 'sleeve'})
+    #     return serializer.data
 
-    def get_left_sleeve(self, obj):
-        serializer =  ImageDetailSerializer(obj.left_sleeve,context={'type':'sleeve'})
-        return serializer.data
+    # def get_left_sleeve(self, obj):
+    #     serializer = ImageDetailSerializer(obj.left_sleeve, context={'type': 'sleeve'})
+    #     return serializer.data
+
 
 class LeftViewSerializer(serializers.ModelSerializer):
     left_v_body_view = ImageDetailSerializer()
@@ -326,14 +331,34 @@ class BackViewSerializer(serializers.ModelSerializer):
                   'back_right_sleeve']
 
     def get_back_left_sleeve(self, obj):
-        serializer =  ImageDetailSerializer(obj.back_left_sleeve,context={'type':'sleeve'})
+        serializer = ImageDetailSerializer(obj.back_left_sleeve, context={'type': 'sleeve'})
         return serializer.data
 
     def get_back_right_sleeve(self, obj):
-        serializer =  ImageDetailSerializer(obj.back_right_sleeve,context={'type':'sleeve'})
+        serializer = ImageDetailSerializer(obj.back_right_sleeve, context={'type': 'sleeve'})
         return serializer.data
 
+
+class ColorDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Color
+        fields = ['id', 'name', 'color_code']
+
+
+class FabricDetailSerializer(serializers.ModelSerializer):
+    colors = ColorDetailSerializer(many=True)
+    selected = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.Fabric
+        fields = ['id', 'name', 'selected', 'colors', 'short_description']
+
+    def get_selected(self, obj):
+        return False
+
+
 class ProductDetailSerializer(serializers.ModelSerializer):
+    fabrics = FabricDetailSerializer(many=True)
     front_view = BodyDetailSerializer()
     left_view = LeftViewSerializer()
     right_view = RightViewSerializer()
@@ -341,7 +366,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'front_view', 'left_view', 'right_view', 'back_view']
+        fields = ['id', 'name', 'fabrics', 'front_view', 'left_view', 'right_view', 'back_view']
 
 
 class BaseBJacketFrontViewSerializer(serializers.ModelSerializer):
@@ -1161,28 +1186,38 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
-    designs = serializers.SerializerMethodField()
+    selected = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Category
-        fields = ['id', 'name', 'key', 'designs']
+        fields = ['id', 'name', 'key', 'selected']
 
-    def get_designs(self, obj):
-        qs = models.ProductDesign.objects.filter(category=obj)
-        serializer = ProductDesignWithCategorySerializers(qs, many=True)
-        return serializer.data
+    def get_selected(self, obj):
+        return False
+
+    # def get_designs(self, obj):
+    #     qs = models.ProductDesign.objects.filter(category=obj)
+    #     serializer = ProductDesignWithCategorySerializers(qs, many=True)
+    #     return serializer.data
 
 
 class ProductDesignWithCategorySerializers(serializers.ModelSerializer):
     key = serializers.SerializerMethodField()
+    category_id = serializers.SerializerMethodField()
+    selected = serializers.SerializerMethodField()
 
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'key', 'display_image']
+        fields = ['id', 'name', 'key', 'category_id', 'display_image', 'selected']
 
     def get_key(self, obj):
-        print(obj.category.key)
         return obj.category.key
+
+    def get_category_id(self, obj):
+        return obj.category.id
+
+    def get_selected(self, obj):
+        return False
 
 
 class CategoryDetailSerializer(serializers.ModelSerializer):

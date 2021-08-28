@@ -1,6 +1,5 @@
 from django.db import models
-
-
+from colorfield.fields import ColorField
 # Create your models here.
 
 
@@ -86,7 +85,7 @@ class Body(TimeStampedModel):
 
     # Body Start
 
-    body_view = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='body_view', blank=True, null=True )
+    body_view = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='body_view', blank=True, null=True)
     body_first_section = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='body_first_section')
     body_second_section = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='body_second_section',
                                             blank=True, null=True)
@@ -760,6 +759,8 @@ class TowelBack(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name}"
+
+
 #
 #
 class VestFront(TimeStampedModel):
@@ -769,19 +770,19 @@ class VestFront(TimeStampedModel):
                                     blank=True)
     zip_vest = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='zip_vest', null=True, blank=True)
     vest_top = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top', null=True,
-                                      blank=True)
+                                 blank=True)
     # vest_top_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top_left', null=True,
     #                                   blank=True)
     # vest_top_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_top_right', null=True,
     #                                    blank=True)
     vest_mid = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_mid', null=True,
-                                      blank=True)
+                                 blank=True)
     # vest_mid_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_mid_left', null=True,
     #                                   blank=True)
     # vest_mid_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_mid_right', null=True,
     #                                    blank=True)
     vest_bottom = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_bottom',
-                                         null=True, blank=True)
+                                    null=True, blank=True)
     # vest_bottom_left = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_bottom_left',
     #                                      null=True, blank=True)
     # vest_bottom_right = models.ForeignKey(ImageField, on_delete=models.CASCADE, related_name='vest_bottom_right',
@@ -1570,11 +1571,29 @@ class BackView(TimeStampedModel):
         return f"{self.name}"
 
 
+class Color(TimeStampedModel):
+    name = models.CharField(max_length=250, unique=True, help_text="Color Name")
+    color_code = ColorField(default='#FF0000')
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Fabric(TimeStampedModel):
+    name = models.CharField(max_length=250, unique=True, help_text="Fabric Name")
+    short_description = models.CharField(max_length=250, help_text="Short Description", blank=True, null=True)
+    colors = models.ManyToManyField(Color)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class ProductDesign(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="Product Design Name")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    fabrics = models.ManyToManyField(Fabric)
     display_image = models.ImageField(upload_to='uploads/display')
-    
+
     front_view = models.ForeignKey(Body, on_delete=models.CASCADE, null=True, blank=True)
     front_view_apron = models.ForeignKey(Apron, on_delete=models.CASCADE, null=True, blank=True)
     front_view_base_b_shirt = models.ForeignKey(BaseBallShirt_Front, on_delete=models.CASCADE, null=True, blank=True)
@@ -1588,7 +1607,6 @@ class ProductDesign(TimeStampedModel):
     front_view_hat = models.ForeignKey(HatFront, on_delete=models.CASCADE, null=True, blank=True)
     front_view_hoodie = models.ForeignKey(HoodieFront, on_delete=models.CASCADE, null=True, blank=True)
     front_view_pant = models.ForeignKey(PantFront, on_delete=models.CASCADE, null=True, blank=True)
-
 
     back_view = models.ForeignKey(BackView, on_delete=models.CASCADE, null=True, blank=True)
     back_view_base_b_shirt = models.ForeignKey(BaseBallShirt_Back, on_delete=models.CASCADE, blank=True, null=True)
