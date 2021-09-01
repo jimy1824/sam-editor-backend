@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
+from pattren.models import LogosCategory, PresetLogos
 
 
 # from api.utils.paginator import ResultsSetPagination
@@ -145,3 +146,35 @@ class LogoView(viewsets.ModelViewSet):
             raise ParseError("File is not Attached")
 
         return Response(serializer.data)
+
+
+class LogoCategoryView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = LogosCategory.objects.all()
+    serializer_classes = {
+        'list': logo_serializer.LogoCategoryListSerializer,
+        'retrieve': logo_serializer.LogoCategoryDetailSerializer,
+
+    }
+    default_serializer_class = logo_serializer.LogoCategoryListSerializer
+
+    # pagination_class = ResultsSetPagination
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+    # @action(detail=False, methods=['post'], name='upload_logo', url_path='upload_logo')
+    # def upload_logo(self, request, *args, **kwargs):
+    #     """
+    #     Returns list of courses by country`.
+    #     """
+    #
+    #     try:
+    #         file = request.data['file']
+    #         obj = models.DesignImages(image=file, name=file.name)
+    #         obj.save()
+    #         serializer = self.get_serializer(models.DesignImages.objects.all(), many=True)
+    #     except KeyError:
+    #         raise ParseError("File is not Attached")
+    #
+    #     return Response(serializer.data)

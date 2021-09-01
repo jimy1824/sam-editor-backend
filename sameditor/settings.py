@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'constructor.apps.ConstructorConfig',
     'api',
+    'pattren',
 #     packages
     'rest_framework',
     'colorfield',
