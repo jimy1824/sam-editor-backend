@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PrintingMethod, LogosCategory, PresetLogos
+from .models import PrintingMethod, LogosCategory, PresetLogos, UserLogo
 
 
 # Register your models here.
@@ -20,5 +20,12 @@ class LogosCategoryAdmin(admin.ModelAdmin):
 @admin.register(PresetLogos)
 class PresetLogosAdmin(admin.ModelAdmin):
     list_display = [field.name for field in PresetLogos._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(UserLogo)
+class PresetLogosAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in UserLogo._meta.fields]
     ordering = ['id']
     search_fields = ('name',)

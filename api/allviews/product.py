@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
-from pattren.models import LogosCategory, PresetLogos
+from pattren.models import LogosCategory, PresetLogos, UserLogo
 
 
 # from api.utils.paginator import ResultsSetPagination
@@ -120,16 +120,29 @@ class CategoryView(viewsets.ModelViewSet):
 
 
 class LogoView(viewsets.ModelViewSet):
-    queryset = models.DesignImages.objects.all()
+    permission_classes = (IsAuthenticated,)
+    queryset = UserLogo.objects.all()
     serializer_classes = {
-        'list': logo_serializer.LogoSerializer,
+        'list': logo_serializer.UserLogoListSerializer,
     }
-    default_serializer_class = logo_serializer.LogoSerializer
+    default_serializer_class = logo_serializer.UserLogoListSerializer
 
     # pagination_class = ResultsSetPagination
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.filter(user=request.user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=['post'], name='upload_logo', url_path='upload_logo')
     def upload_logo(self, request, *args, **kwargs):
@@ -139,9 +152,9 @@ class LogoView(viewsets.ModelViewSet):
 
         try:
             file = request.data['file']
-            obj = models.DesignImages(image=file, name=file.name)
+            obj = UserLogo(image=file, name=file.name, user=request.user)
             obj.save()
-            serializer = self.get_serializer(models.DesignImages.objects.all(), many=True)
+            serializer = self.get_serializer(UserLogo.objects.filter(user=request.user), many=True)
         except KeyError:
             raise ParseError("File is not Attached")
 

@@ -3,7 +3,7 @@ from constructor import models
 from pattren.models import LogosCategory, PresetLogos
 
 
-class LogoSerializer(serializers.ModelSerializer):
+class UserLogoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DesignImages
         fields = ['id', 'name', 'image']

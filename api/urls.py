@@ -7,7 +7,7 @@ from api.allviews import product
 router = routers.DefaultRouter()
 router.register(r'category', product.CategoryView)
 router.register(r'product', product.ProductView)
-router.register(r'logos', product.LogoView)
+router.register(r'user_logo', product.LogoView)
 router.register(r'logos_category', product.LogoCategoryView)
 
 urlpatterns = [
