@@ -3,10 +3,6 @@
 *.pyc
 .idea
 .env
-/venv
-*.pyc
-.idea
-.env
 ./media
 db.sqlite3
 /media
