@@ -3,3 +3,10 @@
 *.pyc
 .idea
 .env
+./media
+db.sqlite3
+/media
+/static
+/staticfiles
+deploy.sh
+/db.sqlite3
