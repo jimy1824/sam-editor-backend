@@ -16,7 +16,6 @@ class ProductView(viewsets.ModelViewSet):
     serializer_classes = {
         'list': product_serializer.ProductDetailSerializer,
         'retrieve': product_serializer.ProductDetailSerializer,
-        'top_tank': product_serializer.TankTopDetailSerializer
     }
     default_serializer_class = product_serializer.ProductDetailSerializer
 
