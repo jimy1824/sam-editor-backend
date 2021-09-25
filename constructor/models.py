@@ -1582,7 +1582,93 @@ class Color(TimeStampedModel):
 class Fabric(TimeStampedModel):
     name = models.CharField(max_length=250, unique=True, help_text="Fabric Name")
     short_description = models.CharField(max_length=250, help_text="Short Description", blank=True, null=True)
+    cost = models.FloatField(default=0)
     colors = models.ManyToManyField(Color)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class SizeFieldModel(TimeStampedModel):
+    height = models.FloatField()
+    width = models.FloatField()
+
+    def __str__(self):
+        return f"height={self.height}--width={self.height}"
+
+
+class ProductSizeModel(TimeStampedModel):
+    name = models.CharField(max_length=250, help_text="Product Size Name")
+    size = models.ForeignKey(SizeFieldModel, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name}--{self.size}"
+
+
+class SilkPrintingMethodSizeCostQuantity(TimeStampedModel):
+    name = models.CharField(max_length=250, unique=True, help_text="Fabric Name")
+    height = models.FloatField()
+    width = models.FloatField()
+    quantity_to = models.IntegerField()
+    quantity_from = models.IntegerField()
+    standard_cost = models.FloatField(default=0)
+    custom_cost = models.FloatField(default=0)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class HeatTransferPrintingMethodSizeCostQuantity(TimeStampedModel):
+    COLOR_PRINTING = 'color_printing'
+    REFLECTIVE = '3m_reflective'
+    METAL = 'metal'
+    Printing_Type_CHOICES = [
+        (COLOR_PRINTING, 'Color Printing'),
+        (REFLECTIVE, '3M Reflective'),
+        (METAL, 'Metal'),
+    ]
+    printing_type = models.CharField(
+        max_length=50,
+        choices=Printing_Type_CHOICES,
+        unique=True
+    )
+    height = models.FloatField()
+    width = models.FloatField()
+    cost = models.FloatField(default=0)
+
+    def __str__(self):
+        return f"{self.printing_type}"
+
+
+class DigitalPrintingMethodSizeCostQuantity(TimeStampedModel):
+    height = models.FloatField()
+    width = models.FloatField()
+    cost = models.FloatField(default=0)
+
+    def __str__(self):
+        return f"{self.height}-{self.width}"
+
+
+class PrintingMethod(TimeStampedModel):
+    SILK_SCREEN = 'silk_screen'
+    HEAT_TRANSFER = 'heat_transfer'
+    DIGITAL = 'digital'
+
+    Printing_Type_CHOICES = [
+        (SILK_SCREEN, 'Silk Screen Printing'),
+        (HEAT_TRANSFER, 'Heat Transfer Printing'),
+        (DIGITAL, 'Digital Printing'),
+    ]
+    printing_method = models.CharField(
+        max_length=50,
+        choices=Printing_Type_CHOICES,
+        default=SILK_SCREEN,
+    )
+    name = models.CharField(max_length=250, unique=True, help_text="Printing Method Name")
+    silk_sizes_quantity_cost = models.ManyToManyField(SilkPrintingMethodSizeCostQuantity)
+    heat_transfer_sizes_cost = models.ForeignKey(HeatTransferPrintingMethodSizeCostQuantity, on_delete=models.CASCADE,
+                                                 blank=True, null=True)
+    digital_sizes_cost = models.ManyToManyField(DigitalPrintingMethodSizeCostQuantity)
 
     def __str__(self):
         return f"{self.name}"
@@ -1592,6 +1678,8 @@ class ProductDesign(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="Product Design Name")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     fabrics = models.ManyToManyField(Fabric)
+    sizes = models.ManyToManyField(ProductSizeModel)
+    printing_method = models.ManyToManyField(PrintingMethod)
     display_image = models.ImageField(upload_to='uploads/display')
 
     front_view = models.ForeignKey(Body, on_delete=models.CASCADE, null=True, blank=True)
