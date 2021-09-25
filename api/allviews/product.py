@@ -16,12 +16,28 @@ class ProductView(viewsets.ModelViewSet):
     serializer_classes = {
         'list': product_serializer.ProductDetailSerializer,
         'retrieve': product_serializer.ProductDetailSerializer,
+        'top_tank': product_serializer.TankTopDetailSerializer
     }
     default_serializer_class = product_serializer.ProductDetailSerializer
 
     # pagination_class = ResultsSetPagination
 
+    # def get_queryset(self):
+    #     import pdb; pdb.set_trace()
+    #     return models.ProductDesign.objects.all()
+
     def get_serializer_class(self):
+        product_design = self.get_object()
+        # import pdb;
+        # pdb.set_trace()
+        if product_design.category.key == 'shirt':
+            # serializer = product_serializer.ProductDetailSerializer(product_design)
+            return self.serializer_classes.get(self.action, self.default_serializer_class)
+            print('abc')
+        if product_design.category.key == 'towel':
+            # serializer = product_serializer.ProductDetailSerializer(product_design)
+            return self.serializer_classes.get(self.action, self.default_serializer_class)
+            print('abc')
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     @action(detail=True, methods=['get'], name='product_detail', url_path='product_detail')

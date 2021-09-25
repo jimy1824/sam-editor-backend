@@ -131,12 +131,26 @@ class TowelBackDetailSerializer(serializers.ModelSerializer):
 
 
 class TowelDetailSerializer(serializers.ModelSerializer):
-    front_view_towel = TowelFrontDetailSerializer()
-    back_view_towel = TowelBackDetailSerializer()
+    front_view = serializers.SerializerMethodField()
+    back_view = serializers.SerializerMethodField()
 
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'front_view_towel', 'back_view_towel']
+        fields = ['id', 'name', 'front_view', 'back_view']
+
+    def get_front_view(self, obj):
+        if obj.front_view_towel:
+            serializer = TowelFrontDetailSerializer(obj.front_view_towel)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_towel:
+            serializer = TowelBackDetailSerializer(obj.back_view_towel)
+            return serializer.data
+        else:
+            return None
 
 
 class PantFrontDetailSerializer(serializers.ModelSerializer):
@@ -184,12 +198,26 @@ class PantBackDetailSerializer(serializers.ModelSerializer):
 
 
 class PantDetailSerializer(serializers.ModelSerializer):
-    front_view_pant = PantFrontDetailSerializer()
-    back_view_pant = PantBackDetailSerializer()
+    front_view = PantFrontDetailSerializer()
+    back_view = PantBackDetailSerializer()
 
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'front_view_pant', 'back_view_pant']
+        fields = ['id', 'name', 'front_view', 'back_view']
+
+    def get_front_view(self, obj):
+        if obj.front_view_pant:
+            serializer = PantFrontDetailSerializer(obj.front_view_pant)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_pant:
+            serializer = PantBackDetailSerializer(obj.back_view_pant)
+            return serializer.data
+        else:
+            return None
 
 
 class VestFrontDetailSerializer(serializers.ModelSerializer):
@@ -230,12 +258,26 @@ class VestBackDetailSerializer(serializers.ModelSerializer):
 
 
 class VestDetailSerializer(serializers.ModelSerializer):
-    front_view_vest = VestFrontDetailSerializer()
-    back_view_vest = VestBackDetailSerializer()
+    front_view = VestFrontDetailSerializer()
+    back_view = VestBackDetailSerializer()
 
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'front_view_vest', 'back_view_vest']
+        fields = ['id', 'name', 'front_view', 'back_view']
+
+    def get_front_view(self, obj):
+        if obj.front_view_vest:
+            serializer = VestFrontDetailSerializer(obj.front_view_vest)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_vest:
+            serializer = VestBackDetailSerializer(obj.back_view_vest)
+            return serializer.data
+        else:
+            return None
 
 
 class BagFrontDetailSerializer(serializers.ModelSerializer):
@@ -495,16 +537,44 @@ class BaseBJacketRightViewSerializer(serializers.ModelSerializer):
 
 
 class BaseBJacDetailSerializer(serializers.ModelSerializer):
-    front_view_base_b_jacket = BaseBJacketFrontViewSerializer()
-    back_view_base_b_jacket = BaseBJacketBackViewSerializer()
-    left_view_base_b_jacket = BaseBJacketLeftViewSerializer()
-    right_view_base_b_jacket = BaseBJacketRightViewSerializer()
+    front_view = BaseBJacketFrontViewSerializer()
+    back_view = BaseBJacketBackViewSerializer()
+    left_view = BaseBJacketLeftViewSerializer()
+    right_view = BaseBJacketRightViewSerializer()
 
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'front_view_base_b_jacket', 'back_view_base_b_jacket', 'left_view_base_b_jacket',
-                  'right_view_base_b_jacket'
+        fields = ['id', 'name', 'front_view', 'back_view', 'left_view',
+                  'right_view'
                   ]
+
+    def get_front_view(self, obj):
+        if obj.front_view_base_b_jacket:
+            serializer = BaseBJacketFrontViewSerializer(obj.front_view_base_b_jacket)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_base_b_jacket:
+            serializer = BaseBJacketBackViewSerializer(obj.back_view_base_b_jacket)
+            return serializer.data
+        else:
+            return None
+
+    def get_right_view(self, obj):
+        if obj.right_view_base_b_jacket:
+            serializer = BaseBJacketRightViewSerializer(obj.right_view_base_b_jacket)
+            return serializer.data
+        else:
+            return None
+
+    def get_left_view(self, obj):
+        if obj.left_view_base_b_jacket:
+            serializer = BaseBJacketLeftViewSerializer(obj.left_view_base_b_jacket)
+            return serializer.data
+        else:
+            return None
 
 
 class CoachJacFrontSerializer(serializers.ModelSerializer):
@@ -608,16 +678,44 @@ class CoachJacRightSerializer(serializers.ModelSerializer):
 
 
 class CoachJacDetailSerializer(serializers.ModelSerializer):
-    front_view_coach_jac = CoachJacFrontSerializer()
-    back_view_base_coach_jac = CoachJacBackSerializer()
-    left_view_coach_jac = CoachJacLeftSerializer()
-    right_view_coach_jac = CoachJacRightSerializer()
+    front_view = CoachJacFrontSerializer()
+    back_view = CoachJacBackSerializer()
+    left_view = CoachJacLeftSerializer()
+    right_view = CoachJacRightSerializer()
 
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'front_view_coach_jac', 'back_view_base_coach_jac', 'left_view_coach_jac',
-                  'right_view_coach_jac'
+        fields = ['id', 'name', 'front_view', 'back_view', 'left_view',
+                  'right_view'
                   ]
+
+    def get_front_view(self, obj):
+        if obj.front_view_coach_jac:
+            serializer = CoachJacFrontSerializer(obj.front_view_coach_jac)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_coach_jac:
+            serializer = CoachJacBackSerializer(obj.back_view_coach_jac)
+            return serializer.data
+        else:
+            return None
+
+    def get_right_view(self, obj):
+        if obj.right_view_coach_jac:
+            serializer = CoachJacRightSerializer(obj.right_view_coach_jac)
+            return serializer.data
+        else:
+            return None
+
+    def get_left_view(self, obj):
+        if obj.left_view_coach_jac:
+            serializer = CoachJacLeftSerializer(obj.left_view_coach_jac)
+            return serializer.data
+        else:
+            return None
 
 
 class HoodieFrontSerializer(serializers.ModelSerializer):
@@ -861,10 +959,10 @@ class HoodieRightSerializer(serializers.ModelSerializer):
 
 
 class HoodieDetailSerializer(serializers.ModelSerializer):
-    front_view_hoodie = HoodieFrontSerializer()
-    back_view_hoodie = HoodieBackSerializer()
-    left_view_hoodie = HoodieLeftSerializer()
-    right_view_hoodie = HoodieRightSerializer()
+    front_view = HoodieFrontSerializer()
+    back_view = HoodieBackSerializer()
+    left_view = HoodieLeftSerializer()
+    right_view = HoodieRightSerializer()
 
     class Meta:
         model = models.ProductDesign
@@ -874,6 +972,34 @@ class HoodieDetailSerializer(serializers.ModelSerializer):
                   'left_view_hoodie',
                   'right_view_hoodie'
                   ]
+
+    def get_front_view(self, obj):
+        if obj.front_view_hoodie:
+            serializer = HoodieFrontSerializer(obj.front_view_hoodie)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_hoodie:
+            serializer = HoodieBackSerializer(obj.back_view_hoodie)
+            return serializer.data
+        else:
+            return None
+
+    def get_right_view(self, obj):
+        if obj.right_view_hoodie:
+            serializer = HoodieRightSerializer(obj.right_view_hoodie)
+            return serializer.data
+        else:
+            return None
+
+    def get_left_view(self, obj):
+        if obj.left_view_hoodie:
+            serializer = HoodieLeftSerializer(obj.left_view_hoodie)
+            return serializer.data
+        else:
+            return None
 
 
 class BomberJacFrontSerializer(serializers.ModelSerializer):
@@ -982,19 +1108,47 @@ class BomberJacRightSerializer(serializers.ModelSerializer):
 
 
 class BomberJacDetailSerializer(serializers.ModelSerializer):
-    front_view_bomber_jac = BomberJacFrontSerializer()
-    back_view_base_bomber_jac = BomberJacBackSerializer()
-    left_view_bomber_jac = BomberJacLeftSerializer()
-    right_view_bomber_jac = BomberJacRightSerializer()
+    front_view = BomberJacFrontSerializer()
+    back_view = BomberJacBackSerializer()
+    left_view = BomberJacLeftSerializer()
+    right_view = BomberJacRightSerializer()
 
     class Meta:
         model = models.ProductDesign
         fields = ['id', 'name',
-                  'front_view_bomber_jac',
-                  'back_view_base_bomber_jac',
-                  'left_view_bomber_jac',
-                  'right_view_bomber_jac'
+                  'front_view',
+                  'back_view',
+                  'left_view',
+                  'right_view'
                   ]
+
+    def get_front_view(self, obj):
+        if obj.front_view_base_b_shirt:
+            serializer = BaseBShirtFrontDetailSerializer(obj.front_view_base_b_shirt)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_base_b_shirt:
+            serializer = BaseBShirtBackDetailSerializer(obj.back_view_base_b_shirt)
+            return serializer.data
+        else:
+            return None
+
+    def get_right_view(self, obj):
+        if obj.right_view_base_b_shirt:
+            serializer = BaseBShirtRightDetailSerializer(obj.right_view_base_b_shirt)
+            return serializer.data
+        else:
+            return None
+
+    def get_left_view(self, obj):
+        if obj.left_view_base_b_shirt:
+            serializer = BaseBShirtLeftDetailSerializer(obj.left_view_base_b_shirt)
+            return serializer.data
+        else:
+            return None
 
 
 class BaseBShirtFrontDetailSerializer(serializers.ModelSerializer):
@@ -1062,19 +1216,47 @@ class BaseBShirtRightDetailSerializer(serializers.ModelSerializer):
 
 
 class BaseBShirtDetailSerializer(serializers.ModelSerializer):
-    front_view_base_b_shirt = BaseBShirtFrontDetailSerializer()
-    back_view_base_b_shirt = BaseBShirtBackDetailSerializer()
-    left_view_base_b_shirt = BaseBShirtLeftDetailSerializer()
-    right_view_base_b_shirt = BaseBShirtRightDetailSerializer()
+    front_view = BaseBShirtFrontDetailSerializer()
+    back_view = BaseBShirtBackDetailSerializer()
+    left_view = BaseBShirtLeftDetailSerializer()
+    right_view = BaseBShirtRightDetailSerializer()
 
     class Meta:
         model = models.ProductDesign
         fields = ['id', 'name',
-                  'front_view_base_b_shirt',
-                  'back_view_base_b_shirt',
-                  'left_view_base_b_shirt',
-                  'right_view_base_b_shirt'
+                  'front_view',
+                  'back_view',
+                  'left_view',
+                  'right_view'
                   ]
+
+    def get_front_view(self, obj):
+        if obj.front_view_base_b_shirt:
+            serializer = BaseBShirtFrontDetailSerializer(obj.front_view_base_b_shirt)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_base_b_shirt:
+            serializer = BaseBShirtBackDetailSerializer(obj.back_view_base_b_shirt)
+            return serializer.data
+        else:
+            return None
+
+    def get_right_view(self, obj):
+        if obj.right_view_base_b_shirt:
+            serializer = BaseBShirtRightDetailSerializer(obj.right_view_base_b_shirt)
+            return serializer.data
+        else:
+            return None
+
+    def get_left_view(self, obj):
+        if obj.left_view_base_b_shirt:
+            serializer = BaseBShirtLeftDetailSerializer(obj.left_view_base_b_shirt)
+            return serializer.data
+        else:
+            return None
 
 
 class TankTopFrontSerializer(serializers.ModelSerializer):
@@ -1130,6 +1312,20 @@ class TankTopDetailSerializer(serializers.ModelSerializer):
                   'back_view_tank_top',
                   ]
 
+    def get_front_view(self, obj):
+        if obj.front_view_tank_top:
+            serializer = TankTopFrontSerializer(obj.front_view_tank_top)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.front_view_tank_top:
+            serializer = TankTopBackSerializer(obj.front_view_tank_top)
+            return serializer.data
+        else:
+            return None
+
 
 class BagFrontSerializer(serializers.ModelSerializer):
     bag_handle_front = ImageDetailSerializer()
@@ -1168,8 +1364,8 @@ class BagBackSerializer(serializers.ModelSerializer):
 
 
 class BagDetailSerializer(serializers.ModelSerializer):
-    front_view_bag = BagFrontSerializer()
-    back_view_bag = BagBackSerializer()
+    front_view = BagFrontSerializer()
+    back_view = BagBackSerializer()
 
     class Meta:
         model = models.ProductDesign
@@ -1177,6 +1373,20 @@ class BagDetailSerializer(serializers.ModelSerializer):
                   'front_view_bag',
                   'back_view_bag',
                   ]
+
+    def get_front_view(self, obj):
+        if obj.front_view_bag:
+            serializer = BagFrontSerializer(obj.front_view_bag)
+            return serializer.data
+        else:
+            return None
+
+    def get_back_view(self, obj):
+        if obj.back_view_bag:
+            serializer = BagBackSerializer(obj.back_view_bag)
+            return serializer.data
+        else:
+            return None
 
 
 class ProductListSerializer(serializers.ModelSerializer):
