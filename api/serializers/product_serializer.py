@@ -103,6 +103,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 class ProductDetailSerializer(serializers.ModelSerializer):
     fabrics = FabricDetailSerializer(many=True)
     front_view = serializers.SerializerMethodField()
+    back_view = serializers.SerializerMethodField()
 
     # back_view = serializers.SerializerMethodField()
 
@@ -114,7 +115,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductDesign
         # fields = ['id', 'name', 'fabrics', 'front_view', 'left_view', 'right_view', 'back_view']
-        fields = ['id', 'name', 'fabrics', 'front_view']
+        fields = ['id', 'name', 'fabrics', 'front_view', 'back_view']
 
     def get_front_view(self, obj):
         if obj.category.key == 'polo-shirt':
@@ -181,5 +182,104 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         #
 
         #
+
+    def get_back_view(self, obj):
+        if obj.category.key == 'polo-shirt':
+            serializer = BackViewShirtSerializer(obj.back_view)
+            return serializer.data
+        if obj.category.key == 'shirt':
+            serializer = BackViewShirtSerializer(obj.back_view)
+            return serializer.data
+        if obj.category.key == 'bag':
+            serializer = BackViewBagDetailSerializer(obj.back_view_bag)
+            return serializer.data
+        if obj.category.key == 'base-ball-jacket':
+            serializer = BackViewBaseBallJacketDetailSerializer(obj.back_view_base_b_jacket)
+            return serializer.data
+        if obj.category.key == 'base-ball-shirt':
+            serializer = BackViewBaseBallShirtDetailSerializer(obj.back_view_base_b_shirt)
+            return serializer.data
+        if obj.category.key == 'bomber-jacket':
+            serializer = BackViewBomberJacketDetailSerializer(obj.back_view_bomber_jac)
+            return serializer.data
+        if obj.category.key == 'hat':
+            serializer = BackViewHatDetailSerializer(obj.back_view_hat)
+            return serializer.data
+        if obj.category.key == 'hoodie':
+            serializer = BackViewHoodieDetailSerializer(obj.back_view_hoodie)
+            return serializer.data
+        if obj.category.key == 'pants':
+            serializer = BackViewPantDetailSerializer(obj.back_view_pant)
+            return serializer.data
+        if obj.category.key == 'tank-top':
+            serializer = BackViewTankTopDetailSerializer(obj.back_view_tank_top)
+            return serializer.data
+        if obj.category.key == 'towel':
+            serializer = BackViewTowelDetailSerializer(obj.back_view_towel)
+            return serializer.data
+        if obj.category.key == 'vest':
+            serializer = BackViewVestDetailSerializer(obj.back_view_vest)
+            return serializer.data
+        if obj.category.key == 'coach-jacket':
+            serializer = BackViewCoachJacketDetailSerializer(obj.back_view_base_coach_jac)
+            return serializer.data
+
+        return None
+
+    def get_left_view(self, obj):
+        if obj.category.key == 'polo-shirt':
+            serializer = LeftViewShirtSerializer(obj.left_view)
+            return serializer.data
+        if obj.category.key == 'shirt':
+            serializer = LeftViewShirtSerializer(obj.left_view)
+            return serializer.data
+        if obj.category.key == 'base-ball-jacket':
+            serializer = LeftViewBaseBallJacketDetailSerializer(obj.left_view_base_b_jacket)
+            return serializer.data
+        if obj.category.key == 'base-ball-shirt':
+            serializer = LeftViewBaseBallShirtDetailSerializer(obj.left_view_base_b_shirt)
+            return serializer.data
+        if obj.category.key == 'bomber-jacket':
+            serializer = LeftViewBomberJacketDetailSerializer(obj.left_view_bomber_jac)
+            return serializer.data
+        if obj.category.key == 'hat':
+            serializer = LeftViewHatDetailSerializer(obj.left_view_hat)
+            return serializer.data
+        if obj.category.key == 'hoodie':
+            serializer = LeftViewHoodieDetailSerializer(obj.left_view_hoodie)
+            return serializer.data
+        if obj.category.key == 'coach-jacket':
+            serializer = LeftViewCoachJacketDetailSerializer(obj.left_view_coach_jac)
+            return serializer.data
+
+        return None
+
+    def get_right_view(self, obj):
+        if obj.category.key == 'polo-shirt':
+            serializer = RightViewShirtSerializer(obj.right_view)
+            return serializer.data
+        if obj.category.key == 'shirt':
+            serializer = RightViewShirtSerializer(obj.right_view)
+            return serializer.data
+        if obj.category.key == 'base-ball-jacket':
+            serializer = RightViewBaseBallJacketDetailSerializer(obj.right_base_b_jacket)
+            return serializer.data
+        if obj.category.key == 'base-ball-shirt':
+            serializer = RightViewBaseBallShirtDetailSerializer(obj.right_view_base_b_shirt)
+            return serializer.data
+        if obj.category.key == 'bomber-jacket':
+            serializer = RightViewBomberJacketDetailSerializer(obj.right_view_bomber_jac)
+            return serializer.data
+        if obj.category.key == 'hat':
+            serializer = RightViewHatDetailSerializer(obj.right_view_hat)
+            return serializer.data
+        if obj.category.key == 'hoodie':
+            serializer = RightViewHoodieDetailSerializer(obj.right_view_hoodie)
+            return serializer.data
+        if obj.category.key == 'coach-jacket':
+            serializer = RightViewCoachJacketDetailSerializer(obj.right_view_coach_jac)
+            return serializer.data
+
+        return None
 
 

@@ -29,14 +29,14 @@ class TowelDetailSerializer(serializers.ModelSerializer):
 
     def get_front_view(self, obj):
         if obj.front_view_towel:
-            serializer = TowelFrontDetailSerializer(obj.front_view_towel)
+            serializer = FrontViewTowelDetailSerializer(obj.front_view_towel)
             return serializer.data
         else:
             return None
 
     def get_back_view(self, obj):
         if obj.back_view_towel:
-            serializer = TowelBackDetailSerializer(obj.back_view_towel)
+            serializer = BackViewTowelDetailSerializer(obj.back_view_towel)
             return serializer.data
         else:
             return None
