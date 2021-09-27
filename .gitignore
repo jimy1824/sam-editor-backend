@@ -4,9 +4,9 @@
 .idea
 .env
 ./media
-db.sqlite3
 /media
 /static
 /staticfiles
 deploy.sh
-/db.sqlite3
+db.sqlite3
+db.sqlitelive3
