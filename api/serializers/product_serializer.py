@@ -104,6 +104,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     fabrics = FabricDetailSerializer(many=True)
     front_view = serializers.SerializerMethodField()
     back_view = serializers.SerializerMethodField()
+    left_view = serializers.SerializerMethodField()
+    right_view = serializers.SerializerMethodField()
 
     # back_view = serializers.SerializerMethodField()
 
@@ -115,7 +117,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductDesign
         # fields = ['id', 'name', 'fabrics', 'front_view', 'left_view', 'right_view', 'back_view']
-        fields = ['id', 'name', 'fabrics', 'front_view', 'back_view']
+        fields = ['id', 'name', 'fabrics', 'front_view', 'back_view', 'left_view', 'right_view']
 
     def get_front_view(self, obj):
         if obj.category.key == 'polo-shirt':
@@ -144,6 +146,9 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             return serializer.data
         if obj.category.key == 'hoodie':
             serializer = FrontViewHoodieDetailSerializer(obj.front_view_hoodie)
+            return serializer.data
+        if obj.category.key == 'coach-jacket':
+            serializer = FrontViewCoachJacketDetailSerializer(obj.front_view_coach_jac)
             return serializer.data
         if obj.category.key == 'pants':
             serializer = FrontViewPantDetailSerializer(obj.front_view_pant)
@@ -200,7 +205,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             serializer = BackViewBaseBallShirtDetailSerializer(obj.back_view_base_b_shirt)
             return serializer.data
         if obj.category.key == 'bomber-jacket':
-            serializer = BackViewBomberJacketDetailSerializer(obj.back_view_bomber_jac)
+            serializer = BackViewBomberJacketDetailSerializer(obj.back_view_base_bomber_jac)
             return serializer.data
         if obj.category.key == 'hat':
             serializer = BackViewHatDetailSerializer(obj.back_view_hat)
@@ -262,7 +267,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             serializer = RightViewShirtSerializer(obj.right_view)
             return serializer.data
         if obj.category.key == 'base-ball-jacket':
-            serializer = RightViewBaseBallJacketDetailSerializer(obj.right_base_b_jacket)
+            serializer = RightViewBaseBallJacketDetailSerializer(obj.right_view_base_b_jacket)
             return serializer.data
         if obj.category.key == 'base-ball-shirt':
             serializer = RightViewBaseBallShirtDetailSerializer(obj.right_view_base_b_shirt)
