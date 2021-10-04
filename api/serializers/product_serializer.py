@@ -233,7 +233,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     def get_left_view(self, obj):
         if obj.category.key == 'polo-shirt':
-            # serializer = LeftViewShirtSerializer(obj.left_view)
+            serializer = LeftViewShirtSerializer(obj.left_view)
             return serializer.data
         if obj.category.key == 'shirt':
             serializer = LeftViewShirtSerializer(obj.left_view)
