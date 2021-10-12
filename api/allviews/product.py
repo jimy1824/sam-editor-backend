@@ -4,8 +4,15 @@ from api.serializers import product_serializer, logo_serializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
+from django.http import HttpResponse
 from rest_framework.response import Response
+from constructor.models import ProductDesign
 from pattren.models import LogosCategory, PresetLogos, UserLogo
+from constructor.models import PrintingMethod
+import json
+from rest_framework.views import APIView
+from api.email import send_register_email
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # from api.utils.paginator import ResultsSetPagination
@@ -191,3 +198,32 @@ class LogoCategoryView(viewsets.ModelViewSet):
     #         raise ParseError("File is not Attached")
     #
     #     return Response(serializer.data)
+
+
+class PriceList( APIView):
+
+    # IsAuthenticated
+    def post(self, request, *args, **kwargs):
+        product_design = ProductDesign.objects.filter(pk=request.data.get("productId")).first()
+
+        results = {'id': 1, 'name': product_design.name, 'price': 900, 'category': product_design.category.name,
+                   'quantity': request.data.get("quantity")}
+
+        dump = json.dumps(results)
+        send_register_email('usaleem651@gmail.com', results)
+        return HttpResponse(dump, content_type='application/json')
+
+# class PriceView(viewsets.ModelViewSet):
+#     permission_classes = (IsAuthenticated,)
+#     queryset = PrintingMethod.objects.all()
+#     serializer_classes = {
+#         'list': logo_serializer.LogoCategoryListSerializer,
+#         'retrieve': logo_serializer.LogoCategoryDetailSerializer,
+#
+#     }
+#     default_serializer_class = logo_serializer.LogoCategoryListSerializer
+#
+#     # pagination_class = ResultsSetPagination
+#
+#     def get_serializer_class(self):
+#         return self.serializer_classes.get(self.action, self.default_serializer_class)
