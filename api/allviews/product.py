@@ -1,11 +1,12 @@
 from rest_framework import viewsets
 from constructor import models
-from api.serializers import product_serializer, logo_serializer
+from api.serializers import product_serializer, logo_serializer, sublimation_serializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from django.http import HttpResponse
 from rest_framework.response import Response
+
 from constructor.models import ProductDesign
 from pattren.models import LogosCategory, PresetLogos, UserLogo
 from constructor.models import PrintingMethod
@@ -13,6 +14,9 @@ import json
 from rest_framework.views import APIView
 from api.email import send_register_email
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from pattren.models import LogosCategory, PresetLogos, UserLogo, PresetSublimationPatterns, SublimationCategory
+
 
 
 # from api.utils.paginator import ResultsSetPagination
@@ -28,7 +32,22 @@ class ProductView(viewsets.ModelViewSet):
 
     # pagination_class = ResultsSetPagination
 
+    # def get_queryset(self):
+    #     import pdb; pdb.set_trace()
+    #     return models.ProductDesign.objects.all()
+
     def get_serializer_class(self):
+        product_design = self.get_object()
+        # import pdb;
+        # pdb.set_trace()
+        if product_design.category.key == 'shirt':
+            # serializer = product_serializer.ProductDetailSerializer(product_design)
+            return self.serializer_classes.get(self.action, self.default_serializer_class)
+            print('abc')
+        if product_design.category.key == 'towel':
+            # serializer = product_serializer.ProductDetailSerializer(product_design)
+            return self.serializer_classes.get(self.action, self.default_serializer_class)
+            print('abc')
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     @action(detail=True, methods=['get'], name='product_detail', url_path='product_detail')
@@ -168,8 +187,50 @@ class LogoView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+# class SublimationView(viewsets.ModelViewSet):
+#     permission_classes = (IsAuthenticated,)
+#     queryset = UserLogo.objects.all()
+#     serializer_classes = {
+#         'list': logo_serializer.UserSublimationListSerializer,
+#     }
+#     default_serializer_class = logo_serializer.UserSublimationListSerializer
+#
+#     # pagination_class = ResultsSetPagination
+#
+#     def get_serializer_class(self):
+#         return self.serializer_classes.get(self.action, self.default_serializer_class)
+#
+#     def list(self, request, *args, **kwargs):
+#         queryset = self.filter_queryset(self.get_queryset())
+#         queryset = queryset.filter(user=request.user)
+#
+#         page = self.paginate_queryset(queryset)
+#         if page is not None:
+#             serializer = self.get_serializer(page, many=True)
+#             return self.get_paginated_response(serializer.data)
+#
+#         serializer = self.get_serializer(queryset, many=True)
+#         return Response(serializer.data)
+#
+#     # @action(detail=False, methods=['post'], name='upload_logo', url_path='upload_logo')
+#     # def upload_logo(self, request, *args, **kwargs):
+#     #     """
+#     #     Returns list of courses by country`.
+#     #     """
+#     #
+#     #     try:
+#     #         file = request.data['file']
+#     #         obj = UserLogo(image=file, name=file.name, user=request.user)
+#     #         obj.save()
+#     #         serializer = self.get_serializer(UserLogo.objects.filter(user=request.user), many=True)
+#     #     except KeyError:
+#     #         raise ParseError("File is not Attached")
+#     #
+#     #     return Response(serializer.data)
+
+
 class LogoCategoryView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = LogosCategory.objects.all()
     serializer_classes = {
         'list': logo_serializer.LogoCategoryListSerializer,
@@ -177,6 +238,21 @@ class LogoCategoryView(viewsets.ModelViewSet):
 
     }
     default_serializer_class = logo_serializer.LogoCategoryListSerializer
+
+    # pagination_class = ResultsSetPagination
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+
+class SublimationCategoryView(viewsets.ModelViewSet):
+    # permission_classes = (IsAuthenticated,)
+    queryset = SublimationCategory.objects.all()
+    serializer_classes = {
+        'list': logo_serializer.SublimationCategoryListSerializer,
+        'retrieve': logo_serializer.SublimationDetailSerializerWithCategory,
+    }
+    default_serializer_class = logo_serializer.SublimationCategoryListSerializer
 
     # pagination_class = ResultsSetPagination
 

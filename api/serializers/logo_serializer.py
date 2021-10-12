@@ -1,12 +1,18 @@
 from rest_framework import serializers
 from constructor import models
-from pattren.models import LogosCategory, PresetLogos
+from pattren.models import LogosCategory, PresetLogos, PresetSublimationPatterns, SublimationCategory
 
 
 class UserLogoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DesignImages
         fields = ['id', 'name', 'image']
+
+
+# class UserSublimationListSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.DesignImages
+#         fields = ['id', 'name', 'image']
 
 
 class LogoCategoryListSerializer(serializers.ModelSerializer):
@@ -20,11 +26,11 @@ class LogoCategoryListSerializer(serializers.ModelSerializer):
         return False
 
 
-class SublimationPatternsListSerializer(serializers.ModelSerializer):
+class LogoCategoryPatternsListSerializer(serializers.ModelSerializer):
     selected = serializers.SerializerMethodField()
 
     class Meta:
-        model = PresetLogos
+        model = PresetSublimationPatterns
         fields = ['id', 'name', 'image', 'selected']
 
     def get_selected(self, obj):
@@ -39,6 +45,43 @@ class LogoCategoryDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'patterns']
 
     def get_patterns(self, obj):
-        serializer = SublimationPatternsListSerializer(PresetLogos.objects.filter(category=obj),
-                                                       context={'request': self.context.get('request')}, many=True)
+        serializer = LogoCategoryPatternsListSerializer(PresetLogos.objects.filter(category=obj),
+                                                        context={'request': self.context.get('request')}, many=True)
+        return serializer.data
+
+
+class SublimationCategoryListSerializer(serializers.ModelSerializer):
+    selected = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SublimationCategory
+        fields = ['id', 'name', 'selected']
+
+    def get_selected(self, obj):
+        return False
+
+
+class SublimationCategoryPatternsListSerializer(serializers.ModelSerializer):
+    selected = serializers.SerializerMethodField()
+
+    class Meta:
+        model = PresetSublimationPatterns
+        fields = ['id', 'name', 'image', 'selected']
+
+    def get_selected(self, obj):
+        return False
+
+
+class SublimationDetailSerializerWithCategory(serializers.ModelSerializer):
+    patterns = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SublimationCategory
+        fields = ['id', 'name', 'patterns']
+
+    def get_patterns(self, obj):
+        # import pdb;pdb.set_trace()
+        serializer = SublimationCategoryPatternsListSerializer(PresetSublimationPatterns.objects.filter(category=obj),
+                                                               context={'request': self.context.get('request')},
+                                                               many=True)
         return serializer.data
