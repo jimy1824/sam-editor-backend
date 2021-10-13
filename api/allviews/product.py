@@ -18,7 +18,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from pattren.models import LogosCategory, PresetLogos, UserLogo, PresetSublimationPatterns, SublimationCategory
 
 
-
 # from api.utils.paginator import ResultsSetPagination
 
 
@@ -276,17 +275,20 @@ class SublimationCategoryView(viewsets.ModelViewSet):
     #     return Response(serializer.data)
 
 
-class PriceList( APIView):
+class PriceList(APIView):
+    permission_classes = (IsAuthenticated,)
 
     # IsAuthenticated
     def post(self, request, *args, **kwargs):
+        # import pdb
+        # pdb.set_trace()
         product_design = ProductDesign.objects.filter(pk=request.data.get("productId")).first()
 
         results = {'id': 1, 'name': product_design.name, 'price': 900, 'category': product_design.category.name,
                    'quantity': request.data.get("quantity")}
 
         dump = json.dumps(results)
-        send_register_email('usaleem651@gmail.com', results)
+        send_register_email(request.user.email, results)
         return HttpResponse(dump, content_type='application/json')
 
 # class PriceView(viewsets.ModelViewSet):
