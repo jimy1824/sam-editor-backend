@@ -5,4 +5,4 @@ from constructor import models
 class ProductComponentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ComponentSelection
-        fields = ['id', 'name', 'image']
+        fields = ['id', 'category', 'component', 'display_image']

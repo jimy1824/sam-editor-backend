@@ -1674,9 +1674,17 @@ class PrintingMethod(TimeStampedModel):
         return f"{self.name}"
 
 
+class Components(TimeStampedModel):
+    name = models.CharField(max_length=250, help_text="Component Name", unique=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class ComponentSelection(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="Component Name")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    component = models.ForeignKey(Components, on_delete=models.CASCADE)
     display_image = models.ImageField(upload_to='uploads/display')
 
     def __str__(self):

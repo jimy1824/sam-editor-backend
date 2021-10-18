@@ -29,8 +29,6 @@ class CustomUserAdmin(admin.ModelAdmin):
     search_fields = ['id', 'email']
 
 
-
-
 @admin.register(ConstructorModels.Fabric)
 class FabricAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Fabric._meta.fields]
@@ -478,3 +476,10 @@ class BagFrontAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.BagFront._meta.fields]
     ordering = ['id']
     search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.Components)
+class BagFrontAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.Components._meta.fields]
+    ordering = ['id']
+    search_fields = ('name', 'category','component')
