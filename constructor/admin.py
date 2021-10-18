@@ -53,6 +53,13 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+@admin.register(ConstructorModels.ComponentSelection)
+class ComponentAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.ComponentSelection._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
 @admin.register(ConstructorModels.ProductDesign)
 class CategoryProductDesignAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'display_image_tag']

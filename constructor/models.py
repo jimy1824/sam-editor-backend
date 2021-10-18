@@ -1674,6 +1674,15 @@ class PrintingMethod(TimeStampedModel):
         return f"{self.name}"
 
 
+class ComponentSelection(TimeStampedModel):
+    name = models.CharField(max_length=250, help_text="Component Name")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    display_image = models.ImageField(upload_to='uploads/display')
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class ProductDesign(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="Product Design Name")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -1681,6 +1690,7 @@ class ProductDesign(TimeStampedModel):
     sizes = models.ManyToManyField(ProductSizeModel)
     printing_method = models.ManyToManyField(PrintingMethod)
     display_image = models.ImageField(upload_to='uploads/display')
+    component_selected = models.ManyToManyField(ComponentSelection)
 
     front_view = models.ForeignKey(Body, on_delete=models.CASCADE, null=True, blank=True)
     front_view_apron = models.ForeignKey(Apron, on_delete=models.CASCADE, null=True, blank=True)

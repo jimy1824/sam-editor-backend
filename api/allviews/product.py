@@ -1,13 +1,13 @@
 from rest_framework import viewsets
 from constructor import models
-from api.serializers import product_serializer, logo_serializer, sublimation_serializer
+from api.serializers import product_serializer, logo_serializer, sublimation_serializer, component_serializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from django.http import HttpResponse
 from rest_framework.response import Response
 
-from constructor.models import ProductDesign
+from constructor.models import ProductDesign, ComponentSelection
 from pattren.models import LogosCategory, PresetLogos, UserLogo
 from constructor.models import PrintingMethod
 import json
@@ -305,3 +305,47 @@ class PriceList(APIView):
 #
 #     def get_serializer_class(self):
 #         return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+
+class ComponentView(viewsets.ModelViewSet):
+
+    permission_classes = (IsAuthenticated,)
+    queryset = ComponentSelection.objects.all()
+    serializer_classes = {
+        'list': component_serializer.ProductComponentListSerializer,
+    }
+    default_serializer_class = component_serializer.ProductComponentListSerializer
+
+    # pagination_class = ResultsSetPagination
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+    def list(self, request, *args, **kwargs):
+
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.filter(user=request.user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # # @action(detail=False, methods=['post'], name='upload_logo', url_path='upload_logo')
+    # # def upload_logo(self, request, *args, **kwargs):
+    # #     """
+    # #     Returns list of courses by country`.
+    # #     """
+    # #
+    # #     try:
+    # #         file = request.data['file']
+    # #         obj = UserLogo(image=file, name=file.name, user=request.user)
+    # #         obj.save()
+    # #         serializer = self.get_serializer(UserLogo.objects.filter(user=request.user), many=True)
+    # #     except KeyError:
+    # #         raise ParseError("File is not Attached")
+    #
+    #     return Response(serializer.data)

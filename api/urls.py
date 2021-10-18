@@ -9,6 +9,7 @@ router.register(r'category', product.CategoryView)
 router.register(r'product', product.ProductView)
 router.register(r'user_logo', product.LogoView)
 router.register(r'logos_category', product.LogoCategoryView)
+router.register(r'component_selection', product.ComponentView)
 
 
 router.register(r'sublimation_category', product.SublimationCategoryView)
