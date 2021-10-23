@@ -313,6 +313,7 @@ class ComponentView(viewsets.ModelViewSet):
     queryset = ComponentSelection.objects.all()
     serializer_classes = {
         'list': component_serializer.ProductComponentListSerializer,
+        'components_by_category': component_serializer.ProductComponentsListSerializer,
     }
     default_serializer_class = component_serializer.ProductComponentListSerializer
 
@@ -324,8 +325,9 @@ class ComponentView(viewsets.ModelViewSet):
         """
          Returns list of componets  by country`.
         """
-        qs = ComponentSelection.objects.filter(category=category_id).all()
-        serializer = self.get_serializer(qs, many=True)
+        qs = ComponentSelection.objects.filter(category=category_id).values_list('component', flat=True)
+        components = Components.objects.filter(id__in=list(qs))
+        serializer = self.get_serializer(components, many=True, context={'category_id': category_id})
         return Response(serializer.data)
 
 
