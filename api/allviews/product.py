@@ -7,7 +7,7 @@ from rest_framework.exceptions import ParseError
 from django.http import HttpResponse
 from rest_framework.response import Response
 
-from constructor.models import ProductDesign, ComponentSelection
+from constructor.models import ProductDesign, ComponentSelection, Components
 from pattren.models import LogosCategory, PresetLogos, UserLogo
 from constructor.models import PrintingMethod
 import json
@@ -325,5 +325,25 @@ class ComponentView(viewsets.ModelViewSet):
          Returns list of componets  by country`.
         """
         qs = ComponentSelection.objects.filter(category=category_id).all()
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
+
+
+class ComponentCategoryView(viewsets.ModelViewSet):
+    queryset = Components.objects.all()
+    serializer_classes = {
+        'list': component_serializer.ProductComponentCategoryNameListSerializer,
+    }
+    default_serializer_class = component_serializer.ProductComponentCategoryNameListSerializer
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+    @action(detail=False, methods=['get'], name='components', url_path='category')
+    def components_by_category(self, request, category_id, name, *args, **kwargs):
+        """
+         Returns list of componets  by country`.
+        """
+        qs = Components.objects.filter(name=name).all()
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)

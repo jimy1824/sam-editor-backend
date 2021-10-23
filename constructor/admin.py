@@ -44,6 +44,20 @@ class ColorAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+@admin.register(ConstructorModels.ProductSizeModel)
+class ProductSizeModelAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.ProductSizeModel._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
+@admin.register(ConstructorModels.SizeFieldModel)
+class SizeFieldModelAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.SizeFieldModel._meta.fields]
+    ordering = ['id']
+    search_fields = ('name',)
+
+
 @admin.register(ConstructorModels.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Category._meta.fields]
@@ -63,7 +77,7 @@ class CategoryProductDesignAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'display_image_tag']
     ordering = ['id']
     search_fields = ('name',)
-    filter_horizontal = ('fabrics',)
+    filter_horizontal = ['fabrics', 'component_selected']
     change_form_template = 'admin/admin_customization.html'
 
     def display_image_tag(self, obj):
@@ -482,4 +496,4 @@ class BagFrontAdmin(admin.ModelAdmin):
 class BagFrontAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Components._meta.fields]
     ordering = ['id']
-    search_fields = ('name', 'category','component')
+    search_fields = ('name', 'category', 'component')

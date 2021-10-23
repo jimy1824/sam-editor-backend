@@ -50,6 +50,15 @@ class ColorDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'color_code']
 
 
+class ComponentDetailSerializer(serializers.ModelSerializer):
+
+    # display_image = ProductComponentListSerializer
+
+    class Meta:
+        model = models.Components
+        fields = ['id', 'name']
+
+
 class FabricDetailSerializer(serializers.ModelSerializer):
     colors = ColorDetailSerializer(many=True)
     selected = serializers.SerializerMethodField()
@@ -57,6 +66,18 @@ class FabricDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Fabric
         fields = ['id', 'name', 'selected', 'colors', 'short_description']
+
+    def get_selected(self, obj):
+        return False
+
+
+class ComponentListDetailSerializer(serializers.ModelSerializer):
+    # component_selected = ComponentDetailSerializer(many=True)
+    selected = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.Components
+        fields = ['id', 'selected', 'name']
 
     def get_selected(self, obj):
         return False
@@ -102,6 +123,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     fabrics = FabricDetailSerializer(many=True)
+    component_selected = ComponentDetailSerializer(many=True)
     front_view = serializers.SerializerMethodField()
     back_view = serializers.SerializerMethodField()
     left_view = serializers.SerializerMethodField()
@@ -117,7 +139,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductDesign
         # fields = ['id', 'name', 'fabrics', 'front_view', 'left_view', 'right_view', 'back_view']
-        fields = ['id', 'name', 'fabrics', 'front_view', 'back_view', 'left_view', 'right_view']
+        fields = ['id', 'name', 'fabrics', 'component_selected', 'front_view', 'back_view', 'left_view', 'right_view']
 
     def get_front_view(self, obj):
         if obj.category.key == 'polo-shirt':
@@ -165,10 +187,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
         return None
 
-
-
         #
-
 
         #
 
@@ -286,5 +305,3 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             return serializer.data
 
         return None
-
-
