@@ -4,7 +4,6 @@ from .product_serializer import ComponentListDetailSerializer
 
 
 class ProductComponentListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.ComponentSelection
 
@@ -22,7 +21,7 @@ class ProductComponentsListSerializer(serializers.ModelSerializer):
     def get_designs(self, obj):
         category_id = self.context.get('category_id')
         designs = models.ComponentSelection.objects.filter(category__id=category_id, component=obj)
-        serializer = ProductComponentListSerializer(designs, many=True)
+        serializer = ProductComponentListSerializer(designs, many=True, context={'request': self.context.get('request')})
         return serializer.data
 
 

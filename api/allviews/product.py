@@ -327,7 +327,8 @@ class ComponentView(viewsets.ModelViewSet):
         """
         qs = ComponentSelection.objects.filter(category=category_id).values_list('component', flat=True)
         components = Components.objects.filter(id__in=list(qs))
-        serializer = self.get_serializer(components, many=True, context={'category_id': category_id})
+        serializer = self.get_serializer(components, many=True,
+                                         context={'category_id': category_id, 'request': request})
         return Response(serializer.data)
 
 
