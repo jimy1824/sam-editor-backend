@@ -59,6 +59,13 @@ class ComponentDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+class ProductPriceDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.PrintingMethod
+        fields = ['name']
+
+
 class FabricDetailSerializer(serializers.ModelSerializer):
     colors = ColorDetailSerializer(many=True)
     selected = serializers.SerializerMethodField()

@@ -293,19 +293,30 @@ class PriceList(APIView):
 
 
 # class PriceView(viewsets.ModelViewSet):
-#     permission_classes = (IsAuthenticated,)
+#     # permission_classes = (IsAuthenticated,)
 #     queryset = PrintingMethod.objects.all()
 #     serializer_classes = {
-#         'list': logo_serializer.LogoCategoryListSerializer,
-#         'retrieve': logo_serializer.LogoCategoryDetailSerializer,
+#         'list': product_serializer.ProductPriceDetailSerializer,
+#         'retrieve': product_serializer.ProductPriceDetailSerializer,
 #
 #     }
-#     default_serializer_class = logo_serializer.LogoCategoryListSerializer
+#     default_serializer_class = product_serializer.ProductPriceDetailSerializer
 #
 #     # pagination_class = ResultsSetPagination
 #
 #     def get_serializer_class(self):
 #         return self.serializer_classes.get(self.action, self.default_serializer_class)
+#
+#     @action(detail=False, methods=['get'], name='price', url_path='category/(?P<category_id>[0-9]+)/price')
+#     def product_by_price(self, request, price, category_id, *args, **kwargs):
+#         """
+#          Returns list of componets  by country`.
+#         """
+#         qs = PrintingMethod.objects.filter(price=price).values_list('price', flat=True)
+#         components = Components.objects.filter(id__in=list(qs))
+#         serializer = self.get_serializer(components, many=True,
+#                                          context={'category_id': category_id, 'request': request})
+#         return Response(serializer.data)
 
 
 class ComponentView(viewsets.ModelViewSet):

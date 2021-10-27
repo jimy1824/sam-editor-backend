@@ -79,6 +79,7 @@ class CategoryProductDesignAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     filter_horizontal = ['fabrics', 'component_selected']
     change_form_template = 'admin/admin_customization.html'
+    save_as = True
 
     def display_image_tag(self, obj):
         return format_html('<img src="{}"  width="100" height="100"/>'.format(obj.display_image.url))
