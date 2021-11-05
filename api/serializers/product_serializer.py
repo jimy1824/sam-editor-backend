@@ -51,7 +51,6 @@ class ColorDetailSerializer(serializers.ModelSerializer):
 
 
 class ComponentDetailSerializer(serializers.ModelSerializer):
-
     # display_image = ProductComponentListSerializer
 
     class Meta:
@@ -60,7 +59,6 @@ class ComponentDetailSerializer(serializers.ModelSerializer):
 
 
 class ProductPriceDetailSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.PrintingMethod
         fields = ['name', 'silk_sizes_quantity_cost', 'heat_transfer_sizes_cost']
@@ -103,7 +101,7 @@ class ProductDesignWithCategorySerializers(serializers.ModelSerializer):
 
     class Meta:
         model = models.ProductDesign
-        fields = ['id', 'name', 'key', 'category_id', 'display_image', 'selected']
+        fields = ['id', 'name', 'key', 'category_id', 'display_image', 'selected', 'base_price']
 
     def get_key(self, obj):
         return obj.category.key
@@ -146,7 +144,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductDesign
         # fields = ['id', 'name', 'fabrics', 'front_view', 'left_view', 'right_view', 'back_view']
-        fields = ['id', 'name', 'fabrics', 'component_selected', 'front_view', 'back_view', 'left_view', 'right_view','base_price']
+        fields = ['id', 'name', 'fabrics', 'component_selected', 'front_view', 'back_view', 'left_view', 'right_view',
+                  'base_price']
 
     def get_front_view(self, obj):
         if obj.category.key == 'polo-shirt':
