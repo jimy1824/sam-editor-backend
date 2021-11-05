@@ -72,7 +72,7 @@ class FabricDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Fabric
-        fields = ['id', 'name', 'selected', 'colors', 'short_description']
+        fields = ['id', 'name', 'selected', 'colors', 'short_description', 'cost']
 
     def get_selected(self, obj):
         return False
