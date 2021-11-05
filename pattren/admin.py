@@ -7,13 +7,13 @@ from constructor.models import PrintingMethod, SilkPrintingMethodSizeCostQuantit
 from .models import PresetSublimationPatterns, SublimationCategory
 
 
-
 # Register your models here.
 @admin.register(PrintingMethod)
 class PrintingMethodAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in PrintingMethod._meta.fields]
+    list_display = ['id', 'name', 'printing_method']
     ordering = ['id']
     search_fields = ('name',)
+    change_form_template = 'admin/admin_printing_customization.html'
 
 
 @admin.register(SilkPrintingMethodSizeCostQuantity)
@@ -49,6 +49,7 @@ class PresetLogosAdmin(admin.ModelAdmin):
     list_display = [field.name for field in PresetLogos._meta.fields]
     ordering = ['id']
     search_fields = ('name',)
+
 
 @admin.register(SublimationCategory)
 class SublimationCategoryAdmin(admin.ModelAdmin):

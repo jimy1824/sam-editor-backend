@@ -42,11 +42,9 @@ class ProductView(viewsets.ModelViewSet):
         if product_design.category.key == 'shirt':
             # serializer = product_serializer.ProductDetailSerializer(product_design)
             return self.serializer_classes.get(self.action, self.default_serializer_class)
-            print('abc')
         if product_design.category.key == 'towel':
             # serializer = product_serializer.ProductDetailSerializer(product_design)
             return self.serializer_classes.get(self.action, self.default_serializer_class)
-            print('abc')
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     @action(detail=True, methods=['get'], name='product_detail', url_path='product_detail')

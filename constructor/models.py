@@ -3,7 +3,6 @@ from colorfield.fields import ColorField
 # Create your models here.
 from django.contrib.auth.models import User
 
-
 from django.contrib.auth.models import AbstractUser
 from .managers import CustomUserManager
 
@@ -1666,10 +1665,10 @@ class PrintingMethod(TimeStampedModel):
         default=SILK_SCREEN,
     )
     name = models.CharField(max_length=250, unique=True, help_text="Printing Method Name")
-    silk_sizes_quantity_cost = models.ManyToManyField(SilkPrintingMethodSizeCostQuantity)
+    silk_sizes_quantity_cost = models.ManyToManyField(SilkPrintingMethodSizeCostQuantity, blank=True, null=True)
     heat_transfer_sizes_cost = models.ForeignKey(HeatTransferPrintingMethodSizeCostQuantity, on_delete=models.CASCADE,
                                                  blank=True, null=True)
-    digital_sizes_cost = models.ManyToManyField(DigitalPrintingMethodSizeCostQuantity)
+    digital_sizes_cost = models.ManyToManyField(DigitalPrintingMethodSizeCostQuantity, blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -1687,6 +1686,7 @@ class ComponentSelection(TimeStampedModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     component = models.ForeignKey(Components, on_delete=models.CASCADE)
     display_image = models.ImageField(upload_to='uploads/display')
+    price = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.name}"
@@ -1700,11 +1700,12 @@ class ComponentSelection(TimeStampedModel):
 class ProductDesign(TimeStampedModel):
     name = models.CharField(max_length=250, help_text="Product Design Name")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    base_price = models.IntegerField(default=0)
     fabrics = models.ManyToManyField(Fabric)
     sizes = models.ManyToManyField(ProductSizeModel)
     printing_method = models.ManyToManyField(PrintingMethod)
     display_image = models.ImageField(upload_to='uploads/display')
-    component_selected = models.ManyToManyField(ComponentSelection)
+    component_selected = models.ManyToManyField(ComponentSelection, blank=True, null=True)
 
     front_view = models.ForeignKey(Body, on_delete=models.CASCADE, null=True, blank=True)
     front_view_apron = models.ForeignKey(Apron, on_delete=models.CASCADE, null=True, blank=True)

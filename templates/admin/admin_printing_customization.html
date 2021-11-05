@@ -1,0 +1,95 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+{{ block.super }}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+    window.onload = function () {
+        var selected_cat = $('#id_printing_method').find(":selected").attr("value");
+        if (selected_cat) {
+            $.ajax({
+                type: 'Post',
+                url: "{% url 'printing_method_model_fields' %}",
+                data: {
+                    'model_id': selected_cat,
+                },
+                success: function (data) {
+                    data['display_false_list'].forEach(iter_elemnts_false)
+
+                    function iter_elemnts_false(item, index) {
+                        // console.log(item, index)
+                        // console.log($(item).parent().parent().parent())
+                        $(item).parent().parent().parent().attr('hidden', 'true')
+                        // console.log($(item).parent().parent().parent())
+                    }
+
+
+                    data['display_true_list'].forEach(iter_elemnts_true)
+
+                    function iter_elemnts_true(item, index) {
+                        // console.log(item, index)
+                        $(item).parent().parent().parent()
+                        $(item).parent().parent().parent().removeAttr('hidden')
+                        $(item).parent().parent().parent()
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                type: 'Post',
+                url: "{% url 'printing_method_all_model_fields' %}",
+                data: {
+                    'model_id': 'model_id',
+                },
+                success: function (data) {
+                    data['all_list'].forEach(iter_elemnts_false)
+
+                    function iter_elemnts_false(item, index) {
+                        // console.log(item, index)
+                        // console.log($(item).parent().parent().parent())
+                        $(item).parent().parent().parent().attr('hidden', 'true')
+                        // console.log($(item).parent().parent().parent())
+                    }
+                }
+
+            });
+        }
+    };
+    $('#id_printing_method').find(":selected").attr("value");
+    $('#id_printing_method').on('change', function (e) {
+
+        e.preventDefault();
+        var model_id = $('#id_printing_method').find(":selected").attr("value")
+        $.ajax({
+            type: 'Post',
+            url: "{% url 'printing_method_model_fields' %}",
+            data: {
+                'model_id': model_id,
+            },
+            success: function (data) {
+                data['display_false_list'].forEach(iter_elemnts_false)
+
+                function iter_elemnts_false(item, index) {
+                    // console.log(item, index)
+                    // console.log($(item).parent().parent().parent())
+                    $(item).parent().parent().parent().attr('hidden', 'true')
+                    // console.log($(item).parent().parent().parent())
+                }
+
+
+                data['display_true_list'].forEach(iter_elemnts_true)
+
+                function iter_elemnts_true(item, index) {
+                    // console.log(item, index)
+                    $(item).parent().parent().parent()
+                    $(item).parent().parent().parent().removeAttr('hidden')
+                    $(item).parent().parent().parent()
+                }
+            }
+        });
+    })
+
+
+</script>
+{% endblock %}

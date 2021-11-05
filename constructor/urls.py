@@ -24,6 +24,10 @@ urlpatterns = [
     path('', views.EditorView.as_view(), name='editor'),
     path('model_fields/', csrf_exempt(views.ModelFieldsView.as_view()), name='model_fields'),
     path('all_model_fields/', csrf_exempt(views.AllModelFieldsView.as_view()), name='all_model_fields'),
+
+    path('printing_method_model_fields/', csrf_exempt(views.PrintingMethodModelFieldsView.as_view()), name='printing_method_model_fields'),
+    path('printing_method_all_model_fields/', csrf_exempt(views.AllPrintingMethodModelFieldsView.as_view()), name='printing_method_all_model_fields'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -146,7 +146,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductDesign
         # fields = ['id', 'name', 'fabrics', 'front_view', 'left_view', 'right_view', 'back_view']
-        fields = ['id', 'name', 'fabrics', 'component_selected', 'front_view', 'back_view', 'left_view', 'right_view']
+        fields = ['id', 'name', 'fabrics', 'component_selected', 'front_view', 'back_view', 'left_view', 'right_view','base_price']
 
     def get_front_view(self, obj):
         if obj.category.key == 'polo-shirt':
