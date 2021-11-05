@@ -63,7 +63,7 @@ class ProductPriceDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PrintingMethod
-        fields = ['name']
+        fields = ['name', 'silk_sizes_quantity_cost', 'heat_transfer_sizes_cost']
 
 
 class FabricDetailSerializer(serializers.ModelSerializer):

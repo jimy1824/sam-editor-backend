@@ -1,6 +1,7 @@
 from django.db import models
 from colorfield.fields import ColorField
 # Create your models here.
+from django.contrib.auth.models import User
 
 
 from django.contrib.auth.models import AbstractUser
@@ -1689,6 +1690,11 @@ class ComponentSelection(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name}"
+
+
+# class UserData(TimeStampedModel):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='User')
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='Selected Categories')
 
 
 class ProductDesign(TimeStampedModel):

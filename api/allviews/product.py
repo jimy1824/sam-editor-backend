@@ -275,48 +275,48 @@ class SublimationCategoryView(viewsets.ModelViewSet):
     #     return Response(serializer.data)
 
 
-class PriceList(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    # IsAuthenticated
-    def post(self, request, *args, **kwargs):
-        # import pdb
-        # pdb.set_trace()
-        product_design = ProductDesign.objects.filter(pk=request.data.get("productId")).first()
-
-        results = {'id': 1, 'name': product_design.name, 'price': 900, 'category': product_design.category.name,
-                   'quantity': request.data.get("quantity")}
-
-        dump = json.dumps(results)
-        send_register_email(request.user.email, results)
-        return HttpResponse(dump, content_type='application/json')
-
-
-# class PriceView(viewsets.ModelViewSet):
-#     # permission_classes = (IsAuthenticated,)
-#     queryset = PrintingMethod.objects.all()
-#     serializer_classes = {
-#         'list': product_serializer.ProductPriceDetailSerializer,
-#         'retrieve': product_serializer.ProductPriceDetailSerializer,
+# class PriceList(APIView):
+#     permission_classes = (IsAuthenticated,)
 #
-#     }
-#     default_serializer_class = product_serializer.ProductPriceDetailSerializer
+#     # IsAuthenticated
+#     def post(self, request, *args, **kwargs):
+#         # import pdb
+#         # pdb.set_trace()
+#         product_design = ProductDesign.objects.filter(pk=request.data.get("productId")).first()
 #
-#     # pagination_class = ResultsSetPagination
+#         results = {'id': 1, 'name': product_design.name, 'price': 900, 'category': product_design.category.name,
+#                    'quantity': request.data.get("quantity")}
 #
-#     def get_serializer_class(self):
-#         return self.serializer_classes.get(self.action, self.default_serializer_class)
-#
-#     @action(detail=False, methods=['get'], name='price', url_path='category/(?P<category_id>[0-9]+)/price')
-#     def product_by_price(self, request, price, category_id, *args, **kwargs):
-#         """
-#          Returns list of componets  by country`.
-#         """
-#         qs = PrintingMethod.objects.filter(price=price).values_list('price', flat=True)
-#         components = Components.objects.filter(id__in=list(qs))
-#         serializer = self.get_serializer(components, many=True,
-#                                          context={'category_id': category_id, 'request': request})
-#         return Response(serializer.data)
+#         dump = json.dumps(results)
+#         send_register_email(request.user.email, results)
+#         return HttpResponse(dump, content_type='application/json')
+
+
+class PriceView(viewsets.ModelViewSet):
+    # permission_classes = (IsAuthenticated,)
+    queryset = PrintingMethod.objects.all()
+    serializer_classes = {
+        'list': product_serializer.ProductPriceDetailSerializer,
+        'retrieve': product_serializer.ProductPriceDetailSerializer,
+
+    }
+    default_serializer_class = product_serializer.ProductPriceDetailSerializer
+
+    # pagination_class = ResultsSetPagination
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+    @action(detail=False, methods=['get'], name='price', url_path='category/(?P<category_id>[0-9]+)/price')
+    def product_by_price(self, request, price, category_id, *args, **kwargs):
+        """
+         Returns list of componets  by country`.
+        """
+        qs = PrintingMethod.objects.filter(price=price).values_list('price', flat=True)
+        price = PrintingMethod.objects.filter(id__in=list(qs))
+        serializer = self.get_serializer(price, many=True,
+                                         context={'category_id': category_id, 'request': request})
+        return Response(serializer.data)
 
 
 class ComponentView(viewsets.ModelViewSet):
