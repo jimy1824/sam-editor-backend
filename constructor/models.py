@@ -1669,6 +1669,7 @@ class PrintingMethod(TimeStampedModel):
     heat_transfer_sizes_cost = models.ForeignKey(HeatTransferPrintingMethodSizeCostQuantity, on_delete=models.CASCADE,
                                                  blank=True, null=True)
     digital_sizes_cost = models.ManyToManyField(DigitalPrintingMethodSizeCostQuantity, blank=True, null=True)
+    printing_price = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.name}"

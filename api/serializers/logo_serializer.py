@@ -31,7 +31,7 @@ class LogoCategoryPatternsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PresetSublimationPatterns
-        fields = ['id', 'name', 'image', 'selected']
+        fields = ['id', 'name', 'image', 'selected', 'logo_price']
 
     def get_selected(self, obj):
         return False
@@ -47,7 +47,11 @@ class LogoCategoryDetailSerializer(serializers.ModelSerializer):
     def get_patterns(self, obj):
         serializer = LogoCategoryPatternsListSerializer(PresetLogos.objects.filter(category=obj),
                                                         context={'request': self.context.get('request')}, many=True)
+
         return serializer.data
+
+    def get_logo_price(self, obj):
+        return PresetLogos.objects.filter(category=obj).first().logo_price
 
 
 class SublimationCategoryListSerializer(serializers.ModelSerializer):
