@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from constructor import models
-from api.serializers import product_serializer, logo_serializer, sublimation_serializer, component_serializer
+from api.serializers import product_serializer, logo_serializer, sublimation_serializer, component_serializer, price_serializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
@@ -294,18 +294,18 @@ class PriceView(viewsets.ModelViewSet):
     # permission_classes = (IsAuthenticated,)
     queryset = PrintingMethod.objects.all()
     serializer_classes = {
-        'list': product_serializer.ProductPriceDetailSerializer,
-        'retrieve': product_serializer.ProductPriceDetailSerializer,
+        'list': price_serializer.PrintingPriceListSerializer,
+        'retrieve': price_serializer.PrintingPriceDetailSerializer,
 
     }
-    default_serializer_class = product_serializer.ProductPriceDetailSerializer
+    default_serializer_class = price_serializer.PrintingPriceListSerializer
 
     # pagination_class = ResultsSetPagination
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
-    @action(detail=False, methods=['get'], name='price', url_path='category/(?P<category_id>[0-9]+)/price')
+    @action(detail=False, methods=['get'], name='printing', url_path='print_name')
     def product_by_price(self, request, price, category_id, *args, **kwargs):
         """
          Returns list of componets  by country`.
