@@ -14,6 +14,7 @@ class PrintingMethodAdmin(admin.ModelAdmin):
     ordering = ['id']
     search_fields = ('name',)
     change_form_template = 'admin/admin_printing_customization.html'
+    # filter_horizontal = ('silk_sizes_quantity_cost', 'digital_sizes_cost', 'heat_transfer_sizes_cost')
 
 
 @admin.register(SilkPrintingMethodSizeCostQuantity)

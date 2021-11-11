@@ -11,7 +11,7 @@ router.register(r'user_logo', product.LogoView)
 router.register(r'logos_category', product.LogoCategoryView)
 router.register(r'component_selection', product.ComponentView)
 router.register(r'component', product.ComponentCategoryView)
-router.register(r'print_name', product.PriceView)
+router.register(r'printing_method', product.PriceView)
 
 
 

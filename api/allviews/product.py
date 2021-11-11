@@ -295,7 +295,8 @@ class PriceView(viewsets.ModelViewSet):
     queryset = PrintingMethod.objects.all()
     serializer_classes = {
         'list': price_serializer.PrintingPriceListSerializer,
-        'retrieve': price_serializer.PrintingPriceDetailSerializer,
+        'retrieve': price_serializer.PrintingPriceListSerializer,
+        'printing_method_detail': price_serializer.PrintingPriceListSerializer,
 
     }
     default_serializer_class = price_serializer.PrintingPriceListSerializer
@@ -304,6 +305,15 @@ class PriceView(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+    @action(detail=False, methods=['get'], name='printing_method_detail', url_path='type/(?P<printing_method>[A-Za-z_]+)')
+    def printing_method_detail(self, request, printing_method, *args, **kwargs):
+        """
+         Returns list of componets  by country`.
+        """
+        qs = PrintingMethod.objects.filter(printing_method=printing_method).first()
+        serializer = self.get_serializer(qs)
+        return Response(serializer.data)
 
     @action(detail=False, methods=['get'], name='printing', url_path='print_name')
     def product_by_price(self, request, price, category_id, *args, **kwargs):

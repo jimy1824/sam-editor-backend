@@ -1606,13 +1606,27 @@ class ProductSizeModel(TimeStampedModel):
 
 
 class SilkPrintingMethodSizeCostQuantity(TimeStampedModel):
+    SOLID_COLOR = 'solid_color'
+    SILVER = 'silver'
+    GOLD = 'gold'
+    COLOR_TYPE_CHOICES = [
+        (SOLID_COLOR, 'Solid Color'),
+        (SILVER, 'Silver'),
+        (GOLD, 'Gold'),
+    ]
     name = models.CharField(max_length=250, unique=True, help_text="Fabric Name")
+    color_type = models.CharField(
+        max_length=50,
+        choices=COLOR_TYPE_CHOICES,
+        default=SOLID_COLOR,
+    )
     height = models.FloatField()
     width = models.FloatField()
     quantity_to = models.IntegerField()
     quantity_from = models.IntegerField()
-    standard_cost = models.FloatField(default=0)
-    custom_cost = models.FloatField(default=0)
+    first_color_cost = models.FloatField(default=0)
+    additional_color_cost = models.FloatField(default=0)
+    screen_cost = models.FloatField(default=0)
 
     def __str__(self):
         return f"{self.name}"
@@ -1627,26 +1641,27 @@ class HeatTransferPrintingMethodSizeCostQuantity(TimeStampedModel):
         (REFLECTIVE, '3M Reflective'),
         (METAL, 'Metal'),
     ]
+    name = models.CharField(max_length=250, help_text="Name")
     printing_type = models.CharField(
         max_length=50,
         choices=Printing_Type_CHOICES,
-        unique=True
     )
     height = models.FloatField()
     width = models.FloatField()
     cost = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.printing_type}"
+        return f"{self.name}"
 
 
 class DigitalPrintingMethodSizeCostQuantity(TimeStampedModel):
+    name = models.CharField(max_length=250, help_text="Name")
     height = models.FloatField()
     width = models.FloatField()
     cost = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.height}-{self.width}"
+        return f"{self.name}"
 
 
 class PrintingMethod(TimeStampedModel):
@@ -1663,13 +1678,13 @@ class PrintingMethod(TimeStampedModel):
         max_length=50,
         choices=Printing_Type_CHOICES,
         default=SILK_SCREEN,
+        unique=True
     )
     name = models.CharField(max_length=250, unique=True, help_text="Printing Method Name")
     silk_sizes_quantity_cost = models.ManyToManyField(SilkPrintingMethodSizeCostQuantity, blank=True, null=True)
-    heat_transfer_sizes_cost = models.ForeignKey(HeatTransferPrintingMethodSizeCostQuantity, on_delete=models.CASCADE,
-                                                 blank=True, null=True)
+    heat_transfer_sizes_cost = models.ManyToManyField(HeatTransferPrintingMethodSizeCostQuantity,blank=True, null=True)
     digital_sizes_cost = models.ManyToManyField(DigitalPrintingMethodSizeCostQuantity, blank=True, null=True)
-    printing_price = models.IntegerField(default=0)
+    printing_base_price = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.name}"
