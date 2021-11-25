@@ -498,3 +498,10 @@ class BagFrontAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ConstructorModels.Components._meta.fields]
     ordering = ['id']
     search_fields = ('name', 'category', 'component')
+
+
+@admin.register(ConstructorModels.UserOrder)
+class UserOrderAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ConstructorModels.UserOrder._meta.fields]
+    ordering = ['id']
+    search_fields = ('user', 'product_design')

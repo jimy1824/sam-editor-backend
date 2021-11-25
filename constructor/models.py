@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth.models import AbstractUser
 from .managers import CustomUserManager
+from django.utils.text import slugify
+import random
+import string
 
 
 class CustomUser(AbstractUser):
@@ -15,6 +18,8 @@ class CustomUser(AbstractUser):
         max_length=255,
         unique=True,
     )
+    address = models.TextField(blank=True, null=True)
+    phone_no = models.TextField(blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -1682,7 +1687,7 @@ class PrintingMethod(TimeStampedModel):
     )
     name = models.CharField(max_length=250, unique=True, help_text="Printing Method Name")
     silk_sizes_quantity_cost = models.ManyToManyField(SilkPrintingMethodSizeCostQuantity, blank=True, null=True)
-    heat_transfer_sizes_cost = models.ManyToManyField(HeatTransferPrintingMethodSizeCostQuantity,blank=True, null=True)
+    heat_transfer_sizes_cost = models.ManyToManyField(HeatTransferPrintingMethodSizeCostQuantity, blank=True, null=True)
     digital_sizes_cost = models.ManyToManyField(DigitalPrintingMethodSizeCostQuantity, blank=True, null=True)
     printing_base_price = models.IntegerField(default=0)
 
@@ -1772,3 +1777,20 @@ class ProductDesign(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name}"
+
+
+class UserOrder(TimeStampedModel):
+    order_no = models.SlugField(unique=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product_design = models.ForeignKey(ProductDesign, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    total_price = models.FloatField()
+
+    def save(self, *args, **kwargs):
+        if not len(self.order_no):
+            random_str = ''.join((random.choice(string.ascii_lowercase) for x in range(10)))
+            self.order_no = slugify(random_str)
+        super(UserOrder, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.order_no}"

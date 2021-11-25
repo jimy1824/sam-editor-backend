@@ -1,20 +1,21 @@
 from rest_framework import viewsets
 from constructor import models
-from api.serializers import product_serializer, logo_serializer, sublimation_serializer, component_serializer, price_serializer
+from api.serializers import product_serializer, logo_serializer, sublimation_serializer, component_serializer, \
+    price_serializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from django.http import HttpResponse
 from rest_framework.response import Response
-
-from constructor.models import ProductDesign, ComponentSelection, Components
+from django.contrib.sites.models import Site
+from constructor.models import ProductDesign, ComponentSelection, Components, UserOrder
 from pattren.models import LogosCategory, PresetLogos, UserLogo
-from constructor.models import PrintingMethod
+from constructor.models import PrintingMethod, CustomUser
 import json
 from rest_framework.views import APIView
 from api.email import send_register_email
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.shortcuts import get_object_or_404
 from pattren.models import LogosCategory, PresetLogos, UserLogo, PresetSublimationPatterns, SublimationCategory
 
 
@@ -306,7 +307,8 @@ class PriceView(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
-    @action(detail=False, methods=['get'], name='printing_method_detail', url_path='type/(?P<printing_method>[A-Za-z_]+)')
+    @action(detail=False, methods=['get'], name='printing_method_detail',
+            url_path='type/(?P<printing_method>[A-Za-z_]+)')
     def printing_method_detail(self, request, printing_method, *args, **kwargs):
         """
          Returns list of componets  by country`.
@@ -369,3 +371,29 @@ class ComponentCategoryView(viewsets.ModelViewSet):
         qs = Components.objects.filter(name=name).all()
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
+
+
+class SendInvoiceView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        product = get_object_or_404(ProductDesign, pk=request.data.get('product_id'))
+        user = CustomUser.objects.get(id=request.user.id)
+        if request.data.get('order_no'):
+            user_order = get_object_or_404(UserOrder, order_no=request.data.get('order_no'))
+            user_order.quantity = request.data.get('quantity')
+            user_order.total_price = request.data.get('total_price')
+            user_order.product_design = product
+            user_order.save()
+        else:
+            user_order = UserOrder(
+                quantity=request.data.get('quantity'),
+                total_price=request.data.get('total_price'),
+                product_design=product,
+                user=user,
+            )
+            user_order.save()
+        site = Site.objects.first()
+        send_register_email(site.domain, user_order)
+        data = {'message': 'email sent successfully', 'order_no': user_order.order_no}
+        return Response(data)
