@@ -1785,6 +1785,7 @@ class UserOrder(TimeStampedModel):
     product_design = models.ForeignKey(ProductDesign, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     total_price = models.FloatField()
+    payment_done = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not len(self.order_no):

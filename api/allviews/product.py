@@ -10,14 +10,15 @@ from rest_framework.response import Response
 from django.contrib.sites.models import Site
 from constructor.models import ProductDesign, ComponentSelection, Components, UserOrder
 from pattren.models import LogosCategory, PresetLogos, UserLogo
-from constructor.models import PrintingMethod, CustomUser
+from constructor.models import PrintingMethod, CustomUser, UserOrder
 import json
 from rest_framework.views import APIView
 from api.email import send_register_email
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from pattren.models import LogosCategory, PresetLogos, UserLogo, PresetSublimationPatterns, SublimationCategory
-
+from rest_framework.generics import ListAPIView
+from api.user_serializers import UserOrderSerializer
 
 # from api.utils.paginator import ResultsSetPagination
 
@@ -397,3 +398,11 @@ class SendInvoiceView(APIView):
         send_register_email(site.domain, user_order)
         data = {'message': 'email sent successfully', 'order_no': user_order.order_no}
         return Response(data)
+
+
+class OrdersView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserOrderSerializer
+
+    def get_queryset(self):
+        return UserOrder.objects.filter(id=self.request.user.id,payment_done=False)
