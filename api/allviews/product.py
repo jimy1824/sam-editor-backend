@@ -408,7 +408,7 @@ class OrdersView(ListAPIView):
     serializer_class = UserOrderSerializer
 
     def get_queryset(self):
-        return UserOrder.objects.filter(id=self.request.user.id, payment_done=False)
+        return UserOrder.objects.filter(user=self.request.user, payment_done=False)
 
 
 class OrderDeleteView(APIView):
