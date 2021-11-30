@@ -17,8 +17,11 @@ from api.email import send_register_email
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from pattren.models import LogosCategory, PresetLogos, UserLogo, PresetSublimationPatterns, SublimationCategory
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, DestroyAPIView
 from api.user_serializers import UserOrderSerializer
+from django.http import Http404
+from rest_framework import status
+
 
 # from api.utils.paginator import ResultsSetPagination
 
@@ -405,4 +408,19 @@ class OrdersView(ListAPIView):
     serializer_class = UserOrderSerializer
 
     def get_queryset(self):
-        return UserOrder.objects.filter(id=self.request.user.id,payment_done=False)
+        return UserOrder.objects.filter(id=self.request.user.id, payment_done=False)
+
+
+class OrderDeleteView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, order_no):
+        try:
+            return UserOrder.objects.get(order_no=order_no)
+        except UserOrder.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, order_no):
+        event = self.get_object(order_no)
+        event.delete()
+        return Response({'message': 'successfully deleted'})

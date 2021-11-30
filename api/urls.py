@@ -5,7 +5,7 @@ from api import views
 from api.allviews import product
 from .user import UserProfileUpdateView, UserProfileView
 from .payments import StripeCheckoutView
-from api.allviews.product import OrdersView
+from api.allviews.product import OrdersView, OrderDeleteView
 
 router = routers.DefaultRouter()
 router.register(r'category', product.CategoryView)
@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^get_profile/', UserProfileView.as_view(), name="get_profile"),
     url(r'^create-checkout-session/', StripeCheckoutView.as_view()),
     url(r'^orders/', OrdersView.as_view()),
+    path('order_delete/<str:order_no>', OrderDeleteView.as_view(), name='order_delete'),
 
 ]
