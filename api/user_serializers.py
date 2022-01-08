@@ -13,7 +13,7 @@ class UserOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserOrder
-        fields = ('id', 'order_no', 'product', 'quantity', 'total_price', 'payment_done', 'created_at', 'updated_at')
+        fields = ('id', 'order_no', 'product', 'hundred', 'oneForty', 'xs', 'l', 'threeXl', 'total_price', 'payment_done', 'created_at', 'updated_at')
 
     def get_product(self, obj):
         return {'name': obj.product_design.name, }
