@@ -1783,7 +1783,12 @@ class UserOrder(TimeStampedModel):
     order_no = models.SlugField(unique=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product_design = models.ForeignKey(ProductDesign, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    hundred = models.IntegerField(blank=True, null=True)
+    oneForty = models.IntegerField(blank=True, null=True)
+    xs = models.IntegerField(blank=True, null=True)
+    l = models.IntegerField(blank=True, null=True)
+    threeXl = models.IntegerField(blank=True, null=True)
+    total_quantity = models.FloatField(default=0)
     total_price = models.FloatField()
     payment_done = models.BooleanField(default=False)
 

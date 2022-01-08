@@ -381,17 +381,30 @@ class SendInvoiceView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        product = get_object_or_404(ProductDesign, pk=request.data.get('product_id'))
+        product = get_object_or_404(ProductDesign, pk=int(request.data.get('product_id')))
         user = CustomUser.objects.get(id=request.user.id)
+        hundred = int(request.data.get('100')) if request.data.get('100') else None
+        oneForty = int(request.data.get('140')) if request.data.get('140') else None
+        xs = int(request.data.get('XS')) if request.data.get('XS') else None
+        l = int(request.data.get('L')) if request.data.get('L') else None
+        threeXl = int(request.data.get('3XL')) if request.data.get('3XL') else None
         if request.data.get('order_no'):
             user_order = get_object_or_404(UserOrder, order_no=request.data.get('order_no'))
-            user_order.quantity = request.data.get('quantity')
+            user_order.hundred = hundred
+            user_order.oneForty = oneForty
+            user_order.xs = xs
+            user_order.l = l
+            user_order.threeXl = threeXl
             user_order.total_price = request.data.get('total_price')
             user_order.product_design = product
             user_order.save()
         else:
             user_order = UserOrder(
-                quantity=request.data.get('quantity'),
+                hundred=hundred,
+                oneForty=oneForty,
+                xs=xs,
+                l=l,
+                threeXl=threeXl,
                 total_price=request.data.get('total_price'),
                 product_design=product,
                 user=user,
@@ -399,7 +412,22 @@ class SendInvoiceView(APIView):
             user_order.save()
         site = Site.objects.first()
         send_register_email(site.domain, user_order)
-        data = {'message': 'email sent successfully', 'order_no': user_order.order_no}
+        order_data = {
+            "product_id": user_order.product_design.id,
+            "order_no": user_order.order_no,
+            "total_price": user_order.total_price
+        }
+        if user_order.hundred:
+            order_data["100"] = user_order.hundred
+        if user_order.oneForty:
+            order_data["140"] = user_order.oneForty
+        if user_order.l:
+            order_data["L"] = user_order.l
+        if user_order.xs:
+            order_data["XS"] = user_order.xs
+        if user_order.threeXl:
+            order_data["3XL"] = user_order.threeXl
+        data = {'message': 'email sent successfully', 'order': order_data}
         return Response(data)
 
 
